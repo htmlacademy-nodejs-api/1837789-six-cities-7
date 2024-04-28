@@ -1,5 +1,6 @@
 import { Command } from './commands/command.interface.js';
 import { CommandParser } from './command-parser.js';
+import { CommandName } from '../consts.js';
 
 type CommandCollection = Record<string, Command>;
 
@@ -7,7 +8,7 @@ export class CLIApplication {
   private commands: CommandCollection = {};
 
   constructor(
-    private readonly defaultCommand: string = '--help'
+    private readonly defaultCommand: string = CommandName.Help
   ) {}
 
   public registerCommands(commandList: Command[]): void {
