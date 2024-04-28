@@ -1,6 +1,6 @@
 import {Location} from './location.type.js';
 
-export type Citi = {
+export type City = {
   name: string;
   location: Location
 }

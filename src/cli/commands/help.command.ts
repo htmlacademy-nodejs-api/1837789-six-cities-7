@@ -1,9 +1,12 @@
 import { Command } from './command.interface.js';
 import chalk from 'chalk';
+import { CommandName } from '../../consts.js';
+
+const VIOLET = [85, 37, 187] as const;
 
 export class HelpCommand implements Command {
   public getName(): string {
-    return '--help';
+    return CommandName.Help;
   }
 
   public async execute(..._parameters: string[]): Promise<void> {
@@ -14,9 +17,9 @@ export class HelpCommand implements Command {
 
         Команды:
 
-            ${chalk.green('--version:')}                   ${chalk.rgb(85, 37, 187)('# выводит номер версии')}
-            ${chalk.green('--help:')}                      ${chalk.rgb(85, 37, 187)('# печатает этот текст')}
-            ${chalk.green('--import')} <path>:             ${chalk.rgb(85, 37, 187)('# импортирует данные из TSV')}
+            ${chalk.green('--version:')}                   ${chalk.rgb(...VIOLET)('# выводит номер версии')}
+            ${chalk.green('--help:')}                      ${chalk.rgb(...VIOLET)('# печатает этот текст')}
+            ${chalk.green('--import')} <path>:             ${chalk.rgb(...VIOLET)('# импортирует данные из TSV')}
     `);
   }
 }

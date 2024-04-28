@@ -20,7 +20,7 @@ export class TSVFileReader implements FileReader {
   private parseRawDataToOffers(): Offer[] {
     return this.rawData
       .split('\n')
-      .filter((row) => row.trim().length > 0)
+      .filter((row) => row.trim().length)
       .map((line) => this.parseLineToOffer(line));
   }
 

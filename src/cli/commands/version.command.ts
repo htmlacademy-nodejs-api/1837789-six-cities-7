@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import chalk from 'chalk';
-
+import { CommandName } from '../../consts.js';
 import { Command } from './command.interface.js';
 
 type PackageJSONConfig = {
@@ -34,7 +34,7 @@ export class VersionCommand implements Command {
   }
 
   public getName(): string {
-    return '--version';
+    return CommandName.Version;
   }
 
   public async execute(..._parameters: string[]): Promise<void> {
