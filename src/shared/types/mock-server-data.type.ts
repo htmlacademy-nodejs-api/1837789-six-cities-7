@@ -3,7 +3,7 @@ import { Location } from './location.type.js';
 import { OfferType } from './offer.type.js';
 import { UserType } from './user.type.js';
 
-export interface MockServerData {
+export type MockServerData = {
   titles: string[];
   descriptions: string[];
   cities: City[];
