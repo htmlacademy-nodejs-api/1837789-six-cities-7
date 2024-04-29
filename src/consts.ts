@@ -4,3 +4,4 @@ export enum CommandName {
   Version = '--version',
   Generate = '--generate'
 }
+
