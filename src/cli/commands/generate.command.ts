@@ -2,6 +2,7 @@ import got from 'got';
 import { Command } from './command.interface.js';
 import { MockServerData } from '../../shared/types/index.js';
 import { appendFile } from 'node:fs/promises';
+import { CommandName } from '../../consts.js';
 import { TSVOfferGenerator } from '../../shared/libs/offer-generator/index.js';
 
 export class GenerateCommand implements Command {
@@ -27,7 +28,7 @@ export class GenerateCommand implements Command {
   }
 
   public getName(): string {
-    return '--generate';
+    return CommandName.Generate;
   }
 
   public async execute(...parameters: string[]): Promise<void> {
