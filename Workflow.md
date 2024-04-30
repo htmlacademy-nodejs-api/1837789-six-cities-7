@@ -64,6 +64,18 @@ npm run ts -- <Путь к модулю с ts-кодом>
 npm start
 ```
 
+#### Импорт данных из TSV файла:
+
+npm run ts ./src/main.cli.ts --import mocks/mock-data.tsv
+
+#### Генерация мок-данных и запись их в TSV файл:
+
+npm run ts ./src/main.cli.ts --generate 100 ./mocks/test-data.tsv http://localhost:3123/api
+
+#### Запуск мок-сервера:
+
+npm run mock:server
+
 В процессе запуска проекта будет выполнен процесс «Сборки проекта» и запуска результирующего кода.
 
 ## Структура проекта
