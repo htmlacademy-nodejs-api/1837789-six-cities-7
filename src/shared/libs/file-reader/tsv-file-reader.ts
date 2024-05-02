@@ -60,7 +60,6 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       encoding: 'utf-8',
     });
 
-    console.log(readStream);
     let remainingData = '';
     let nextLinePosition = -1;
     let importedRowCount = 0;

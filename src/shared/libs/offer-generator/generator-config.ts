@@ -1,12 +1,12 @@
 export const GeneratorConfig = {
-  MinRating: 1,
-  MaxRating: 5,
-  MinBedroom: 1,
-  MaxBedroom: 6,
-  MinRoom: 1,
-  MaxRoom: 6,
-  MinPrice: 10,
-  MaxPrice: 1000,
-  FirstWeekDay: 1,
-  LastWeekDay: 7
+  minRating: 1,
+  maxRating: 5,
+  minBedroom: 1,
+  maxBedroom: 6,
+  minRoom: 1,
+  maxRoom: 6,
+  minPrice: 10,
+  maxPrice: 1000,
+  firstWeekDay: 1,
+  lastWeekDay: 7
 } as const;

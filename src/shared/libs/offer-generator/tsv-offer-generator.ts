@@ -12,18 +12,18 @@ export class TSVOfferGenerator implements OfferGenerator {
     const title = getRandomItem<string>(this.mockData.titles);
     const description = getRandomItem<string>(this.mockData.descriptions);
     const publicDate = dayjs()
-      .subtract(generateRandomValue(GeneratorConfig.FirstWeekDay, GeneratorConfig.LastWeekDay), 'day')
+      .subtract(generateRandomValue(GeneratorConfig.firstWeekDay, GeneratorConfig.lastWeekDay), 'day')
       .toISOString();
     const city = getRandomItem(this.mockData.cities);
     const previewImage = getRandomItem(this.mockData.previewImages);
     const images = getRandomItems(this.mockData.images).join(';');
     const isPremium = getRandomItem(this.mockData.isPremium);
     const isFavorite = getRandomItem(this.mockData.isFavorite);
-    const rating = generateRandomValue(GeneratorConfig.MinRating, GeneratorConfig.MaxRating);
+    const rating = generateRandomValue(GeneratorConfig.minRating, GeneratorConfig.maxRating);
     const type = getRandomItem(this.mockData.types);
-    const room = generateRandomValue(GeneratorConfig.MinRoom, GeneratorConfig.MaxRoom);
-    const bedroom = generateRandomValue(GeneratorConfig.MinBedroom, GeneratorConfig.MaxBedroom);
-    const price = generateRandomValue(GeneratorConfig.MinPrice, GeneratorConfig.MaxPrice);
+    const room = generateRandomValue(GeneratorConfig.minRoom, GeneratorConfig.maxRoom);
+    const bedroom = generateRandomValue(GeneratorConfig.minBedroom, GeneratorConfig.maxBedroom);
+    const price = generateRandomValue(GeneratorConfig.minPrice, GeneratorConfig.maxPrice);
     const goods = getRandomItems(this.mockData.goods).join(';');
     const hostName = getRandomItem(this.mockData.hostNames);
     const hostEmail = getRandomItem(this.mockData.hostEmails);
