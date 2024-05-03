@@ -5,3 +5,8 @@ export enum CommandName {
   Generate = '--generate'
 }
 
+export enum EventList {
+  Line = 'line',
+  End = 'end'
+}
+
