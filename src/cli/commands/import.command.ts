@@ -13,7 +13,7 @@ export class ImportCommand implements Command {
     console.info(`${count} rows imported.`);
   }
 
-  public getName(): string {
+  public get name(): string {
     return CommandName.Import;
   }
 
