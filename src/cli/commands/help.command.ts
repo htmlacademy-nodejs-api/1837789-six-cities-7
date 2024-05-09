@@ -5,7 +5,7 @@ import { CommandName } from '../../consts.js';
 const VIOLET = [85, 37, 187] as const;
 
 export class HelpCommand implements Command {
-  public getName(): string {
+  public get name(): string {
     return CommandName.Help;
   }
 

@@ -25,13 +25,13 @@ export class GenerateCommand implements Command {
     }
   }
 
-  public getName(): string {
+  public get name(): string {
     return CommandName.Generate;
   }
 
   public async execute(...parameters: string[]): Promise<void> {
     const [count, filepath, url] = parameters;
-    const offerCount = Number.parseInt(count, 10);
+    const offerCount = Number(count);
 
     // Код для получения данных с сервера.
     // Формирование объявлений.

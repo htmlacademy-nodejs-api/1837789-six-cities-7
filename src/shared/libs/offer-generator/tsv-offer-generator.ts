@@ -9,8 +9,8 @@ export class TSVOfferGenerator implements OfferGenerator {
 
   public generate(): string {
 
-    const title = getRandomItem<string>(this.mockData.titles);
-    const description = getRandomItem<string>(this.mockData.descriptions);
+    const title = getRandomItem(this.mockData.titles);
+    const description = getRandomItem(this.mockData.descriptions);
     const publicDate = dayjs()
       .subtract(generateRandomValue(GeneratorConfig.firstWeekDay, GeneratorConfig.lastWeekDay), 'day')
       .toISOString();

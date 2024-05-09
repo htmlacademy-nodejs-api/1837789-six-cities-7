@@ -2,6 +2,7 @@ import EventEmitter from 'node:events';
 import { createReadStream } from 'node:fs';
 import { FileReader } from './file-reader.interface.js';
 import { UserType, Offer, OfferType } from '../../types/index.js';
+import { EventList } from '../../../consts.js';
 
 const stringToBoolean = (str: string): boolean => str === 'true';
 
@@ -66,17 +67,19 @@ export class TSVFileReader extends EventEmitter implements FileReader {
 
     for await (const chunk of readStream) {
       remainingData += chunk.toString();
+      nextLinePosition = remainingData.indexOf('\n');
 
-      while ((nextLinePosition = remainingData.indexOf('\n')) >= 0) {
+      while (nextLinePosition >= 0) {
         const completeRow = remainingData.slice(0, nextLinePosition + 1);
         remainingData = remainingData.slice(++nextLinePosition);
+        nextLinePosition = remainingData.indexOf('\n');
         importedRowCount++;
 
         const parsedOffer = this.parseLineToOffer(completeRow);
-        this.emit('line', parsedOffer);
+        this.emit(EventList.Line, parsedOffer);
       }
     }
 
-    this.emit('end', importedRowCount);
+    this.emit(EventList.End, importedRowCount);
   }
 }
