@@ -6,6 +6,6 @@ export class CreateUserDto {
     public password: string,
     public email: string,
     public type: UserType,
-    public avatarUrl?: string
+    public avatarUrl: string
   ) {}
 }

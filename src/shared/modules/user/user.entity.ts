@@ -20,7 +20,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   @prop({required: true, trim: true, unique: true})
   public email: string;
 
-  @prop({required: true, trim: true, default: ''})
+  @prop({required: false, trim: true, default: ''})
   public avatarUrl: string;
 
   @prop({required: true, trim: true, default: ''})
@@ -29,12 +29,12 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   @prop({required: true, enum: UserType})
   public type: UserType;
 
-  constructor(userData: User, avatarUrlDefault: string) {
+  constructor(userData: User) {
     super();
 
     this.name = userData.name;
     this.email = userData.email;
-    this.avatarUrl = userData.avatarUrl ?? avatarUrlDefault;
+    this.avatarUrl = userData.avatarUrl;
     this.type = userData.type;
   }
 
