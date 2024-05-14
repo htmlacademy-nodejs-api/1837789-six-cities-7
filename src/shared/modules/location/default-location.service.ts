@@ -6,6 +6,7 @@ import { Logger } from '../../libs/logger/index.js';
 import { DocumentType, types } from '@typegoose/typegoose';
 import { inject, injectable } from 'inversify';
 
+
 @injectable()
 export class DefaultLocationService implements LocationService {
   constructor(
