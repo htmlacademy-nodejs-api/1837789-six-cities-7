@@ -16,7 +16,7 @@ export interface OfferEntity extends defaultClasses.Base {
 })
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
-  @prop({required: true, unique: true})
+  @prop({required: true})
   public title: string;
 
   @prop({required: true, enum: OfferType})
