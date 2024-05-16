@@ -1,12 +1,10 @@
-import { City } from '../../types/city.type.js';
-import { Location } from '../../types/location.type.js';
 import { OfferType } from '../../types/offer.type.js';
 
 export class CreateOfferDto {
   public title: string;
   public description: string;
   public publicDate: Date;
-  public city: City;
+  public cityId: string;
   public previewImage: string;
   public images: string[];
   public isPremium: boolean;
@@ -18,5 +16,5 @@ export class CreateOfferDto {
   public price: number;
   public goods: string[];
   public hostId: string;
-  public location: Location;
+  public locationId: string;
 }
