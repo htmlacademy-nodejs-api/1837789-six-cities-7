@@ -1,11 +1,11 @@
 import { CityService } from './city-service.interface.js';
 import { CityEntity } from './city.entity.js';
-import { City } from '../../types/city.type.js';
 import { LocationService } from '../location/index.js';
 import { Component } from '../../types/component.enum.js';
 import { Logger } from '../../libs/logger/index.js';
 import {DocumentType, types} from '@typegoose/typegoose';
 import {inject, injectable} from 'inversify';
+import { CreateCityDto } from './create-city.dto.js';
 
 @injectable()
 export class DefaultCityService implements CityService {
@@ -24,19 +24,19 @@ export class DefaultCityService implements CityService {
     return this.cityModel.findOne({name: cityName});
   }
 
-  public async findOrCreate(cityData: City): Promise<DocumentType<CityEntity>> {
-    const existedCity = await this.findByName(cityData.name);
-    if (existedCity) {
-      return existedCity;
+  public async findOrCreate(dto: CreateCityDto): Promise<DocumentType<CityEntity>> {
+    const existingCity = await this.findByName(dto.name);
+    if (existingCity) {
+      return existingCity;
     }
-    return this.create(cityData);
+    return this.create(dto);
   }
 
-  private async create(cityData: City): Promise<DocumentType<CityEntity>> {
-    const {location: locationData} = cityData;
+  private async create(dto: CreateCityDto): Promise<DocumentType<CityEntity>> {
+    const {location: locationData} = dto;
     const location = await this.locationService.findOrCreate(locationData);
 
-    const city = new CityEntity(cityData, location.id);
+    const city = new CityEntity(dto, location.id);
     const result = await this.cityModel.create(city);
     this.logger.info(`New city created: ${city.name}`);
 

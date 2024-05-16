@@ -1,9 +1,9 @@
 import { CityEntity } from './city.entity.js';
-import { City } from '../../types/city.type.js';
 import { DocumentType } from '@typegoose/typegoose';
+import { CreateCityDto } from './create-city.dto.js';
 
 export interface CityService {
-  findOrCreate(cityData: City): Promise<DocumentType<CityEntity>>;
+  findOrCreate(dto: CreateCityDto): Promise<DocumentType<CityEntity>>;
 
   findById(id: number): Promise<DocumentType<CityEntity> | null>;
 

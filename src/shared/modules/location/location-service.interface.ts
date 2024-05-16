@@ -1,10 +1,10 @@
 import { LocationEntity } from './location.entity.js';
-import { Location } from '../../types/location.type.js';
 import { DocumentType } from '@typegoose/typegoose';
+import { CreateLocationDto } from './index.js';
 
 export interface LocationService {
 
-  findOrCreate(locationData: Location): Promise<DocumentType<LocationEntity>>;
+  findOrCreate(dto: CreateLocationDto): Promise<DocumentType<LocationEntity>>;
 
   findById(id: number): Promise<DocumentType<LocationEntity> | null>;
 
