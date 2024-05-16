@@ -18,7 +18,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
   private parseLineToOffer(line: string): Offer {
     const [title, description, publicDate, cityName, cityLocationLatitude, cityLocationLongitude,
       previewImage, images, isPremium, isFavorite, rating, type, room, bedroom, price, goods,
-      hostName, hostEmail, hostAvatarUrl, hostType, offerLocationLatitude, offerLocationLongitude] = line.split('\t');
+      hostName, hostEmail, hostAvatarUrl, hostPassword, hostType, offerLocationLatitude, offerLocationLongitude] = line.split('\t');
 
     return {
       title,
@@ -45,6 +45,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
         name: hostName,
         email: hostEmail,
         avatarUrl: hostAvatarUrl,
+        password: hostPassword,
         type: hostType as UserType
       },
       location: {
