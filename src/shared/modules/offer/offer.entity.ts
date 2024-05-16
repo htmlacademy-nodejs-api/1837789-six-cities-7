@@ -1,5 +1,3 @@
-import { CityEntity } from '../city/index.js';
-import { LocationEntity } from '../location/index.js';
 import { Location, City, User, Offer, OfferType } from '../../types/index.js';
 import { UserEntity } from '../user/index.js';
 import { defaultClasses, getModelForClass, modelOptions, prop, Ref } from '@typegoose/typegoose';
@@ -25,9 +23,7 @@ export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
   @prop({required: true})
   public bedroom: number;
 
-  @prop({required: true, ref: CityEntity})
-  public cityId: Ref<CityEntity>;
-
+  @prop({required: true})
   public city: City;
 
   @prop({required: true})
@@ -50,9 +46,7 @@ export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
   @prop({required: true})
   public isPremium: boolean;
 
-  @prop({required: true, ref: LocationEntity})
-  public locationId: Ref<LocationEntity>;
-
+  @prop({required: true})
   public location: Location;
 
   @prop({required: true})
@@ -72,9 +66,9 @@ export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
 
   constructor(
     offerData: Offer,
-    cityId: Ref<CityEntity>,
+    city: City,
     hostId: Ref<UserEntity>,
-    locationId: Ref<LocationEntity>
+    location: Location
   ) {
     super();
     this.bedroom = offerData.bedroom;
@@ -93,9 +87,9 @@ export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
     this.room = offerData.room;
     this.title = offerData.title;
     this.type = offerData.type;
-    this.cityId = cityId;
+    this.city = city;
     this.hostId = hostId;
-    this.locationId = locationId;
+    this.location = location;
   }
 }
 

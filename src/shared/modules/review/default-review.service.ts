@@ -29,4 +29,8 @@ export class DefaultReviewService implements ReviewService {
   public async findOrCreate(_dto: CreateReviewDto): Promise<DocumentType<ReviewEntity>> {
     throw new Error('Method not implemented.');
   }
+
+  public async find(): Promise<DocumentType<ReviewEntity>[]> {
+    return this.reviewModel.find();
+  }
 }

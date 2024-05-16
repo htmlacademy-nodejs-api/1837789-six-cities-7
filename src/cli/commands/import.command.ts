@@ -6,15 +6,11 @@ import { getErrorMessage, getMongoURI } from '../../shared/helpers/index.js';
 import { DefaultUserService, UserModel, UserService } from '../../shared/modules/user/index.js';
 import { DefaultOfferService, OfferModel, OfferService } from '../../shared/modules/offer/index.js';
 import { DatabaseClient, MongoDatabaseClient } from '../../shared/libs/database-client/index.js';
-import { DefaultCityService, CityModel, CityService } from '../../shared/modules/city/index.js';
-import { LocationModel, LocationService, DefaultLocationService } from '../../shared/modules/location/index.js';
 import { Logger, ConsoleLogger } from '../../shared/libs/logger/index.js';
 import { DEFAULT_DB_PORT } from './command.constant.js';
 
 export class ImportCommand implements Command {
   private userService: UserService;
-  private locationService: LocationService;
-  private cityService: CityService;
   private offerService: OfferService;
   private databaseClient: DatabaseClient;
   private logger: Logger;
@@ -26,9 +22,6 @@ export class ImportCommand implements Command {
 
     this.logger = new ConsoleLogger();
     this.offerService = new DefaultOfferService(this.logger, OfferModel);
-    this.userService = new DefaultUserService(this.logger, UserModel);
-    this.locationService = new DefaultLocationService(this.logger, LocationModel);
-    this.cityService = new DefaultCityService(this.logger, CityModel, this.locationService);
     this.userService = new DefaultUserService(this.logger, UserModel);
     this.databaseClient = new MongoDatabaseClient(this.logger);
   }
@@ -46,16 +39,11 @@ export class ImportCommand implements Command {
     this.salt = 'salt';
     const user = await this.userService.findOrCreate({...offer.host}, this.salt);
 
-    const [location, city] = await Promise.all([
-      this.locationService.findOrCreate({...offer.location}),
-      this.cityService.findOrCreate({...offer.city})
-    ]);
-
     await this.offerService.create({
       title: offer.title,
       description: offer.description,
       publicDate: offer.publicDate,
-      cityId: city.id,
+      city: offer.city,
       previewImage: offer.previewImage,
       images: offer.images,
       isPremium: offer.isPremium,
@@ -67,7 +55,7 @@ export class ImportCommand implements Command {
       price: offer.price,
       goods: offer.goods,
       hostId: user.id,
-      locationId: location.id,
+      location: offer.location,
     });
   }
 
