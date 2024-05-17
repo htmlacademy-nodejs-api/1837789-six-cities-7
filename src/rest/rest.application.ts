@@ -21,8 +21,9 @@ export class RestApplication {
       this.config.get('DB_PORT'),
       this.config.get('DB_NAME'),
     );
+    this.logger.info(mongoUri);
 
-    return this.databaseClient.connect(mongoUri);
+    return this.databaseClient.connect('mongodb://127.0.0.1:27017/sixCities?authSource=admin');
   }
 
   public async init() {

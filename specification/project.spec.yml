@@ -1,0 +1,688 @@
+openapi: 3.1.0
+info:
+  title: API сервер для демо-проекта «Шесть городов».
+  description: |-
+    * Список ресурсов и маршрутов сервера «Шесть городов».
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 2.0.0
+
+tags:
+  - name: comments
+    description: Действия с комментариями
+  - name: offers
+    description: Действия с объявлениями
+  - name: users
+    description: Действия с пользователем
+
+paths:
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Регистрация пользователя
+      description: Регистрирует нового пользователя
+
+      requestBody:
+        description: Информация для создания нового пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+        required: true
+
+      responses:
+        201:
+          description: Пользователь зарегистрирован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        409:
+          description: Пользователь с таким email уже существует
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Авторизация пользователя
+      description: Авторизирует пользователя на основе логина и пароля
+
+      requestBody:
+        description: Информация для входа в закрытую часть приложения
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/authUser'
+
+      responses:
+        200:
+          description: Пользователь авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/token'
+        401:
+          description: Непрвильный логин или пароль. Или такой пользователь не существует
+
+    get:
+      tags:
+        - users
+      summary: Проверка состояния пользователя
+      description: Сервис предоставляет ресурс для проверки состояния клиента — авторизован или нет.
+        Если клиент авторизован, сервис возвращает соответствующий код состояния и информацию о пользователе
+
+      parameters:
+        - name: token
+          in: header
+          description: 'Token (формат: JWT + "token")'
+          required: true
+          schema:
+            type: string
+
+      responses:
+        200:
+          description: Проверка авторизаций пройдена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        401:
+          description: Срок действия токена истек.
+
+  /users/logout:
+    post:
+      tags:
+        - users
+      summary: Завершение пользовательского сеанса
+      description: Если токен прошёл проверку, сервис завершает пользовательский сеанс (сессию).
+        В противном случае возвращает ошибку и соответствующий код состояния.
+      parameters:
+        - name: token
+          in: header
+          description: 'Token (формат: JWT + "token")'
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '201':
+          description: Cервис завершает пользовательский сеанс (сессию).
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Срок действия токена истек
+
+#OFFERS
+  /offers/:
+    get:
+      tags:
+        - offers
+      summary: Список предложений по аренде
+      description: По умолчанию сервис возвращает не больше 60 предложений по аренде.
+        Можно запросить больше предложений, указав нужное количество в параметре запроса.
+        Сервис всегда возвращает отсортированный список предложений по дате публикации (по убыванию).
+        Предложение не содержит список комментариев. Только информацию об их количестве. Для запроса комментариев к определённому предложению сервис предоставляет отдельный ресурс.
+        Список предложений по аренде могут запрашивать анонимные и авторизованные клиенты.
+      parameters:
+        - name: limit
+          in: query
+          description: limit
+          schema:
+            type: number
+
+      responses:
+        200:
+          description: Список предложений по аренде.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offer'
+
+    post:
+      tags:
+        - offers
+      summary: Создание нового предложения
+      description:  Создавать предложения могут только авторизованные клиенты.
+        В случае успешного создания предложения сервис в ответе возвращает информацию о созданном предложении (объект предложения).
+      parameters:
+        - name: token
+          in: header
+          description: 'Token (формат: JWT + "token")'
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Информация для создания нового предложения.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createOffer'
+        required: true
+
+      responses:
+        201:
+          description: Создание нового предложения.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+        401:
+          description: Срок действия токена истек.
+
+  /offers/{offer_id}/:
+    get:
+      tags:
+        - offers
+      summary: Детальная информация по предложению.
+      description:  Детальная информация по предложению включает сведения о количестве комментариев. Сами комментарии не включены.
+        Детальную информацию по предложению могут запрашивать авторизованные и анонимные клиенты.
+
+      responses:
+        200:
+          description: Список предложений по аренде.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+
+        401:
+          description: Срок действия токена истек.
+
+    put:
+      tags:
+        - offers
+      summary: Редактирование предложения.
+      description: Редактирование предложения. Редактировать предложения по аренде могут только авторизованные клиенты.
+      parameters:
+        - name: token
+          in: header
+          description: 'Token (формат: JWT + "token")'
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Информация для создания нового пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/offer'
+        required: true
+
+      responses:
+        201:
+          description: Редактирование предложения.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+        401:
+          description: Срок действия токена истек.
+
+    delete:
+      tags:
+        - offers
+      summary: Удаление предложения по аренде.
+      description: Удаление предложения по аренде. Клиент может удалять только свои предложения.
+        При удалении предложения комментарии к предложению удаляются автоматически.
+        Удалять предложения могут только авторизованные клиенты.
+
+      parameters:
+        - name: token
+          in: header
+          description: 'Token (формат: JWT + "token")'
+          required: true
+          schema:
+            type: string
+
+      responses:
+        204:
+          description: Удаление предложения по аренде.
+          content:
+            application/json:
+              schema:
+                type: object
+        401:
+          description: Срок действия токена истек.
+
+  /offers/premium/:
+    get:
+      tags:
+        - offers
+      summary: Список премиальные предложения для города.
+      description: Список премиальные предложения для города для определённого города.
+        Премиальное предложение — предложение с флагом «Premium».
+        Сервис возвращает не больше 3 предложений с флагом «Premium».
+        Список возвращаемых предложений отсортирован по дате публикации (по убыванию).
+        Ресурс доступен авторизованным и анонимным клиентам.
+      parameters:
+        - name: limit
+          in: query
+          description: limit
+          schema:
+            type: number
+
+      responses:
+        200:
+          description: Список предложений по аренде.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offer'
+
+  /offers/favorites/:
+    get:
+      tags:
+        - offers
+      summary: Список избранных предложений.
+      description: Список избранных предложений, добавленных в избранное.
+        Сервис возвращает все предложения, добавленные в избранное.
+        Ресурс доступен только авторизованным клиентам.
+      parameters:
+        - name: token
+          in: header
+          description: 'Token (формат: JWT + "token")'
+          required: true
+          schema:
+            type: string
+
+      responses:
+        200:
+          description: Список избранных предложений.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offer'
+        401:
+          description: Срок действия токена истек.
+
+  /offers/{offer_id}/favorite/:
+    put:
+      tags:
+        - offers
+      summary: Добавление и удаление предложения в/из избранного
+      description:
+        Сервис предоставляет ресурс для добавления и удаления любого предложения в/из списка избранных предложений.
+        Ресурс доступен только авторизованным клиентам.
+      parameters:
+        - name: token
+          in: header
+          description: 'Token (формат: JWT + "token")'
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Добавление и удаление предложения в/из избранного.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                isFavorite:
+                  type: boolean
+                  example: false
+        required: true
+
+      responses:
+        200:
+          description: Добавление или удаление избранного открытого набора данных для пользователя.
+          content:
+            application/json:
+              schema:
+                type: object
+        401:
+          description: Срок действия токена истекы
+
+# COMMENTS
+  /comments/{offer_id}/:
+    get:
+      tags:
+        - comments
+      summary: Список комментариев для предложения.
+      description: Список комментариев для предложения для определённого предложения.
+        Сервис всегда возвращает список из 50 (или меньше) последних комментариев.
+        Комментарии отсортированы по дате публикации (по убыванию). Сначала новые, потом старые.
+        Комментарии могут запрашивать авторизованные и анонимные клиенты.
+
+      responses:
+        200:
+          description: Список комментариев для предложения.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/comment'
+
+  /comments/:
+    post:
+      tags:
+        - comments
+      summary: Добавление комментария.
+      description: Добавление комментария к определённому предложению по аренде.
+        Добавлять комментарии могут только авторизованные клиенты.
+        Удаление и редактирование комментариев не предусмотрено.
+      parameters:
+        - name: token
+          in: header
+          description: 'Token (формат: JWT + "token")'
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Добавление комментария.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/comment'
+        required: true
+
+      responses:
+        201:
+          description: Добавление комментария.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/comment'
+        401:
+          description: Срок действия токена истек
+
+
+#COMPONENTS
+components:
+  schemas:
+    authUser:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: zholud.artem@gmail.com
+
+        password:
+          type: string
+          example: sadfscvkwer2324324SDWE3_$
+
+    user:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 123dfdg34kfdsklfew423432
+
+        username:
+          type: string
+          example: Артем Жолудь
+
+        avatarPath:
+          type: string
+          example: example-path-to-img.png
+
+        status:
+          type: string
+          enum:
+            - usual
+            - pro
+          example: pro
+
+    createUser:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: zholud.artem@gmail.com
+
+        username:
+          type: string
+          example: Артем Жолудь
+
+        password:
+          type: string
+          example: zdDwe34x_fdl234
+
+    token:
+      type: object
+
+      properties:
+        token:
+          type: string
+          example: tokenAuthorization
+
+#OFFERS
+
+    offer:
+      type: object
+
+      properties:
+        title:
+          type: string
+          example: title
+
+        description:
+          type: string
+          example: description
+
+        publicationDate:
+          type: string
+          example: 2024-01-02T11:55:41.283Z
+          format: date
+
+        city:
+          type: string
+          example: Paris
+          enum:
+            - Paris
+            - Cologne
+            - Brussels
+            - Amsterdam
+            - Hamburg
+            - Dusseldorf
+
+        previewImage:
+          type: string
+          example: example-path-to-img.png
+
+        listImages:
+          type: array
+          example:
+            - example-path-to-img.png,
+            - example-path-to-img.png,
+            - example-path-to-img.png,
+            - example-path-to-img.png,
+            - example-path-to-img.png,
+            - example-path-to-img.png,
+
+        isPremium:
+          type: boolean
+          example: true
+
+        isFavorite:
+          type: boolean
+          example: false
+
+        rating:
+          type: number
+          example: 4.3
+
+        houseType:
+          type: string
+          example: Paris
+          enum:
+            - apartment
+            - house
+            - room
+            - hotel
+
+        rooms:
+          type: number
+          example: 2
+
+        guests:
+          type: number
+          example: 2
+
+        rentalCost:
+          type: number
+          example: 1234
+
+        amenities:
+          type: array
+          example:
+            - Baby seat
+            - Washer
+            - Towels
+          enum:
+            - Breakfast
+            - Air conditioning
+            - Laptop friendly workspace
+            - Baby seat
+            - Washer
+            - Towels
+            - Fridge
+
+        latitude:
+          type: number
+          example: 48.85661
+
+        longitude:
+          type: number
+          example: 2.351499
+
+        commentCount:
+          type: number
+          example: 13
+
+    createOffer:
+      type: object
+
+      properties:
+        title:
+          type: string
+          example: title
+
+        description:
+          type: string
+          example: description
+
+        publicationDate:
+          type: string
+          example: 2024-01-02T11:55:41.283Z
+          format: date
+
+        city:
+          type: string
+          example: Paris
+          enum:
+            - Paris
+            - Cologne
+            - Brussels
+            - Amsterdam
+            - Hamburg
+            - Dusseldorf
+
+        previewImage:
+          type: string
+          example: example-path.png
+
+        listImages:
+          type: array
+          example:
+            - example-path-to-img.png,
+            - example-path-to-img.png,
+            - example-path-to-img.png,
+            - example-path-to-img.png,
+            - example-path-to-img.png,
+            - example-path-to-img.png,
+
+        isPremium:
+          type: boolean
+          example: false
+
+        isFavorite:
+          type: boolean
+          example: false
+
+        rating:
+          type: number
+          example: 3.4
+
+        houseType:
+          type: string
+          example: Paris
+          enum:
+            - apartment
+            - house
+            - room
+            - hotel
+
+        rooms:
+          type: number
+          example: 3
+
+        guests:
+          type: number
+          example: 4
+
+        rentalCost:
+          type: number
+          example: 5432
+
+        amenities:
+          type: array
+          example:
+            - Baby seat
+            - Washer
+            - Towels
+          enum:
+            - Breakfast
+            - Air conditioning
+            - Laptop friendly workspace
+            - Baby seat
+            - Washer
+            - Towels
+            - Fridge
+
+        latitude:
+          type: number
+          example: 48.85661
+
+        longitude:
+          type: number
+          example: 2.351499
+
+        userId:
+          type: string
+          example: 1231234sdfzxfgwer123fg34
+
+#COMMENTS
+
+    comment:
+      type: object
+
+      properties:
+        description:
+          type: string
+          example: description
+
+        rating:
+          type: number
+          example: 3.5
+
+        userId:
+          type: string
+          example: 1231234sdfzxfgwer123fg34

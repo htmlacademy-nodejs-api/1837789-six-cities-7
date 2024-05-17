@@ -1,10 +1,10 @@
 import { ReviewService } from './review-service.interface.js';
 import { ReviewEntity } from './review.entity.js';
-import { Review } from '../../types/review.type.js';
 import { Component } from '../../types/component.enum.js';
 import { Logger } from '../../libs/logger/index.js';
 import { DocumentType, types } from '@typegoose/typegoose';
 import { inject, injectable } from 'inversify';
+import { CreateReviewDto } from './index.js';
 
 @injectable()
 export class DefaultReviewService implements ReviewService {
@@ -14,10 +14,9 @@ export class DefaultReviewService implements ReviewService {
   ) {
   }
 
-  public async create(reviewData: Review): Promise<DocumentType<ReviewEntity>> {
-    const review = new ReviewEntity(reviewData);
-    const result = await this.reviewModel.create(review);
-    this.logger.info(`New review with publish date ${review.publishDate} created`);
+  public async create(dto: CreateReviewDto): Promise<DocumentType<ReviewEntity>> {
+    const result = await this.reviewModel.create(dto);
+    this.logger.info(`New review with publish date ${result.publishDate} created`);
 
     return result;
   }
@@ -26,7 +25,11 @@ export class DefaultReviewService implements ReviewService {
     return this.reviewModel.findById(id);
   }
 
-  public async fineOrCreate(_reviewData: Review): Promise<DocumentType<ReviewEntity>> {
+  public async findOrCreate(_dto: CreateReviewDto): Promise<DocumentType<ReviewEntity>> {
     throw new Error('Method not implemented.');
+  }
+
+  public async find(): Promise<DocumentType<ReviewEntity>[]> {
+    return this.reviewModel.find();
   }
 }
