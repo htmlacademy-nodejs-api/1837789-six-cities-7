@@ -72,7 +72,6 @@ export class ImportCommand implements Command {
     await this.databaseClient.connect('mongodb://127.0.0.1:27017/sixCities?authSource=admin');
 
     const fileReader = new TSVFileReader(filename.trim());
-    console.log(fileReader);
 
     fileReader.on('line', this.onImportedOffer);
     fileReader.on('end', this.onCompleteImport);

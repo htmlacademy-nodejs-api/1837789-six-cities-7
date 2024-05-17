@@ -15,9 +15,8 @@ export class DefaultReviewService implements ReviewService {
   }
 
   public async create(dto: CreateReviewDto): Promise<DocumentType<ReviewEntity>> {
-    const review = new ReviewEntity(dto);
-    const result = await this.reviewModel.create(review);
-    this.logger.info(`New review with publish date ${review.publishDate} created`);
+    const result = await this.reviewModel.create(dto);
+    this.logger.info(`New review with publish date ${result.publishDate} created`);
 
     return result;
   }
