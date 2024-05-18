@@ -1,8 +1,8 @@
-import {User} from '../../types/index.js';
 
 export class CreateReviewDto {
+  public offerId: string;
   public comment: string;
   public publishDate: Date;
   public rating: number;
-  public author: User;
+  public userId: string;
 }

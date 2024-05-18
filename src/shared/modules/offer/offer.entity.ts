@@ -59,10 +59,13 @@ export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
   public publicDate: Date;
 
   @prop({required: true})
-  public rating: number;
+  public rating: number = 0;
 
   @prop({required: true})
   public room: number;
+
+  @prop({required: true})
+  public reviewCount: number = 0;
 
   constructor(
     offerData: Offer,
@@ -83,7 +86,6 @@ export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
     this.previewImage = offerData.previewImage;
     this.price = offerData.price;
     this.publicDate = offerData.publicDate;
-    this.rating = offerData.rating;
     this.room = offerData.room;
     this.title = offerData.title;
     this.type = offerData.type;

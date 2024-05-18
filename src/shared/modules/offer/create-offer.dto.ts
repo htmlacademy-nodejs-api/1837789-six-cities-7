@@ -1,6 +1,5 @@
 import { OfferType, City, Location } from '../../types/index.js';
 
-
 export class CreateOfferDto {
   public title: string;
   public description: string;
@@ -10,7 +9,6 @@ export class CreateOfferDto {
   public images: string[];
   public isPremium: boolean;
   public isFavorite: boolean;
-  public rating: number;
   public type: OfferType;
   public room: number;
   public bedroom: number;

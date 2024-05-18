@@ -3,7 +3,7 @@ import { DocumentType } from '@typegoose/typegoose';
 import { CreateReviewDto } from './index.js';
 
 export interface ReviewService {
-  findOrCreate(dto: CreateReviewDto): Promise<DocumentType<ReviewEntity>>;
-  find(): Promise<DocumentType<ReviewEntity>[]>;
-  findById(id: number): Promise<DocumentType<ReviewEntity> | null>;
+  create(dto: CreateReviewDto): Promise<DocumentType<ReviewEntity>>;
+  findByOfferId(offerId: string, count?: number): Promise<DocumentType<ReviewEntity>[]>;
+  deleteByOfferId(offerId: string): Promise<number | null>;
 }

@@ -1,10 +1,12 @@
 import { ReviewService } from './review-service.interface.js';
 import { ReviewEntity } from './review.entity.js';
-import { Component } from '../../types/component.enum.js';
+import { Component, SortType } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { DocumentType, types } from '@typegoose/typegoose';
 import { inject, injectable } from 'inversify';
 import { CreateReviewDto } from './index.js';
+
+const DEFAULT_REVIEW_COUNT = 50;
 
 @injectable()
 export class DefaultReviewService implements ReviewService {
@@ -21,15 +23,18 @@ export class DefaultReviewService implements ReviewService {
     return result;
   }
 
-  public async findById(id: number): Promise<DocumentType<ReviewEntity> | null> {
-    return this.reviewModel.findById(id);
+  public async findByOfferId(offerId: string, count?: number): Promise<DocumentType<ReviewEntity>[]> {
+    const limit = count ?? DEFAULT_REVIEW_COUNT;
+    return this.reviewModel
+      .find({offerId})
+      .sort({createdAt: SortType.Down})
+      .limit(limit)
+      .populate('userId');
   }
 
-  public async findOrCreate(_dto: CreateReviewDto): Promise<DocumentType<ReviewEntity>> {
-    throw new Error('Method not implemented.');
-  }
+  public async deleteByOfferId(offerId: string): Promise<number | null> {
+    const result = await this.reviewModel.deleteMany({offerId});
 
-  public async find(): Promise<DocumentType<ReviewEntity>[]> {
-    return this.reviewModel.find();
+    return result.deletedCount;
   }
 }
