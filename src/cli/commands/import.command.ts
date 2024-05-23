@@ -48,7 +48,6 @@ export class ImportCommand implements Command {
       images: offer.images,
       isPremium: offer.isPremium,
       isFavorite: offer.isFavorite,
-      rating: offer.price,
       type: offer.type,
       room: offer.room,
       bedroom: offer.bedroom,

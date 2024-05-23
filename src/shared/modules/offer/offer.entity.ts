@@ -1,4 +1,4 @@
-import { Location, City, User, Offer, OfferType } from '../../types/index.js';
+import { Location, City, User, OfferType } from '../../types/index.js';
 import { UserEntity } from '../user/index.js';
 import { defaultClasses, getModelForClass, modelOptions, prop, Ref } from '@typegoose/typegoose';
 
@@ -13,7 +13,7 @@ export interface OfferEntity extends defaultClasses.Base {
   }
 })
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
-export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
+export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true})
   public title: string;
 
@@ -59,38 +59,7 @@ export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
   public publicDate: Date;
 
   @prop({required: true})
-  public rating: number;
-
-  @prop({required: true})
   public room: number;
-
-  constructor(
-    offerData: Offer,
-    city: City,
-    hostId: Ref<UserEntity>,
-    location: Location
-  ) {
-    super();
-    this.bedroom = offerData.bedroom;
-    this.city = offerData.city;
-    this.description = offerData.description;
-    this.goods = offerData.goods;
-    this.host = offerData.host;
-    this.images = offerData.images;
-    this.isFavorite = offerData.isFavorite;
-    this.isPremium = offerData.isPremium;
-    this.location = offerData.location;
-    this.previewImage = offerData.previewImage;
-    this.price = offerData.price;
-    this.publicDate = offerData.publicDate;
-    this.rating = offerData.rating;
-    this.room = offerData.room;
-    this.title = offerData.title;
-    this.type = offerData.type;
-    this.city = city;
-    this.hostId = hostId;
-    this.location = location;
-  }
 }
 
 export const OfferModel = getModelForClass(OfferEntity);
