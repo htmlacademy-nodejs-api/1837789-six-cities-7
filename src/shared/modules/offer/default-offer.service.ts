@@ -54,9 +54,7 @@ export class DefaultOfferService implements OfferService {
     return result[0] ?? null;
   }
 
-  public async find(count?: number): Promise<DocumentType<OfferEntity>[]> {
-    // return this.offerModel.find().populate(['userId']).exec();
-    const limit = count ?? DEFAULT_OFFER_COUNT;
+  public async find(count = DEFAULT_OFFER_COUNT): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel.aggregate([
       {
         $lookup: {
@@ -74,7 +72,7 @@ export class DefaultOfferService implements OfferService {
       },
       { $unset: ['reviews'] },
       { $sort: { createdAt: SortType.Down } },
-      { $limit: limit },
+      { $limit: count },
     ])
       .exec();
   }
@@ -91,12 +89,11 @@ export class DefaultOfferService implements OfferService {
       .exec();
   }
 
-  public async findPremium(count?: number): Promise<DocumentType<OfferEntity>[]> {
-    const limit = count ?? DEFAULT_OFFER_PREMIUM_COUNT;
+  public async findPremium(count = DEFAULT_OFFER_PREMIUM_COUNT): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
-      .find({premium: true})
+      .find({isPremium: true})
       .sort({createdAt: SortType.Down})
-      .limit(limit)
+      .limit(count)
       .populate(['userId'])
       .exec();
   }
@@ -114,7 +111,7 @@ export class DefaultOfferService implements OfferService {
       .findByIdAndUpdate(offerId, {
         '$inc': {
           reviewCount: 1,
-        }}).exec();
+        }}, {new: true}).exec();
   }
 
   public async exists(documentId: string): Promise<boolean> {

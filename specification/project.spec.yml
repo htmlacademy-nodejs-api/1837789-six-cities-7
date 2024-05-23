@@ -410,7 +410,7 @@ components:
       properties:
         email:
           type: string
-          example: zholud.artem@gmail.com
+          example: alinavdovichenko.ru@gmail.com
 
         password:
           type: string
@@ -426,7 +426,7 @@ components:
 
         username:
           type: string
-          example: Артем Жолудь
+          example: Алина Вдовиченко
 
         avatarPath:
           type: string
@@ -445,11 +445,11 @@ components:
       properties:
         email:
           type: string
-          example: zholud.artem@gmail.com
+          example: alinavdovichenko.ru@gmail.com
 
         username:
           type: string
-          example: Артем Жолудь
+          example: Алина Вдовиченко
 
         password:
           type: string
@@ -479,7 +479,7 @@ components:
 
         publicationDate:
           type: string
-          example: 2024-01-02T11:55:41.283Z
+          example: 2024-05-05T11:55:41.283Z
           format: date
 
         city:
@@ -581,7 +581,7 @@ components:
 
         publicationDate:
           type: string
-          example: 2024-01-02T11:55:41.283Z
+          example: 2024-05-05T11:55:41.283Z
           format: date
 
         city:
