@@ -11,6 +11,26 @@ import { Types } from 'mongoose';
 export const DEFAULT_OFFER_PREMIUM_COUNT = 3;
 export const DEFAULT_OFFER_COUNT = 60;
 
+const addReviewsToOffer = [
+  {
+    $lookup: {
+      from: 'reviews',
+      localField: '_id',
+      foreignField: 'offerId',
+      as: 'reviews',
+    }
+  },
+  {
+    $addFields: {
+      reviewCount: {$size: '$reviews'},
+      rating: {$avg: '$reviews.rating'},
+    }
+  },
+  {
+    $unset: 'reviews'
+  }
+];
+
 @injectable()
 export class DefaultOfferService implements OfferService {
   constructor(
@@ -30,23 +50,7 @@ export class DefaultOfferService implements OfferService {
       {
         $match: { _id: new Types.ObjectId(offerId) }
       },
-      {
-        $lookup: {
-          from: 'reviews',
-          localField: '_id',
-          foreignField: 'offerId',
-          as: 'reviews',
-        }
-      },
-      {
-        $addFields: {
-          reviewCount: {$size: '$reviews'},
-          rating: {$avg: '$reviews.rating'},
-        }
-      },
-      {
-        $unset: 'reviews'
-      }
+      ...addReviewsToOffer,
     ])
       .exec();
 
@@ -58,19 +62,18 @@ export class DefaultOfferService implements OfferService {
     return this.offerModel.aggregate([
       {
         $lookup: {
-          from: 'reviews',
-          localField: '_id',
-          foreignField: 'offerId',
-          as: 'reviews',
+          from: 'users',
+          localField: 'hostId',
+          foreignField: '_id',
+          as: 'user',
         }
       },
+      ...addReviewsToOffer,
       {
         $addFields: {
-          reviewCount: {$size: '$reviews'},
-          rating: {$avg: '$reviews.rating'},
+          host: {$arrayElemAt: ['$user', 0]},
         }
       },
-      { $unset: ['reviews'] },
       { $sort: { createdAt: SortType.Down } },
       { $limit: count },
     ])
