@@ -8,3 +8,4 @@ export { createUserContainer } from './user.container.js';
 export { UserService } from './user-service.interface.js';
 export { UpdateUserDto } from './update-user.dto.js';
 export { UserController } from './user.controller.js';
+export { UserRdo } from './user.rdo.js';
