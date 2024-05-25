@@ -60,20 +60,7 @@ export class DefaultOfferService implements OfferService {
 
   public async find(count = DEFAULT_OFFER_COUNT): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel.aggregate([
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'hostId',
-          foreignField: '_id',
-          as: 'user',
-        }
-      },
       ...addReviewsToOffer,
-      {
-        $addFields: {
-          host: {$arrayElemAt: ['$user', 0]},
-        }
-      },
       { $sort: { createdAt: SortType.Down } },
       { $limit: count },
     ])
