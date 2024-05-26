@@ -7,9 +7,6 @@ import { getMongoURI } from '../shared/helpers/index.js';
 import express, { Express } from 'express';
 import { Controller, ExceptionFilter } from '../shared/libs/rest/index.js';
 
-import { UserService } from '../shared/modules/user/user-service.interface.js';
-import { UserType } from '../shared/types/index.js';
-
 @injectable()
 export class RestApplication {
   private readonly server: Express;
@@ -20,9 +17,6 @@ export class RestApplication {
     @inject(Component.DatabaseClient) private readonly databaseClient: DatabaseClient,
     @inject(Component.ExceptionFilter) private readonly appExceptionFilter: ExceptionFilter,
     @inject(Component.UserController) private readonly userController: Controller,
-
-    @inject(Component.Config) private readonly configService: Config<RestSchema>,
-    @inject(Component.UserService) private readonly userService: UserService,
   ) {
     this.server = express();
   }
@@ -81,14 +75,5 @@ export class RestApplication {
       `🚀 Server started on http://localhost:${this.config.get('PORT')}`
     );
 
-    const result = await this.userService.create({
-      name: 'Alina',
-      password: '12345',
-      email: 'weqrt@gmail.com',
-      type: 'pro' as UserType,
-      avatarUrl: 'torrance.png',
-    }, this.configService.get('SALT'));
-
-    console.log('comments', result);
   }
 }
