@@ -33,7 +33,7 @@ Content-Type: application/json
     "Кофемашина",
     "Гладильная доска с утюгом"
   ],
-  "userId": "664ee08d0030834403a91fa4",
+  "hostId": "664ee08d0030834403a91fa4",
   "location": {
     "latitude": 48.85661,
     "longitude": 2.351499
@@ -63,7 +63,7 @@ Content-Type: application/json
 
 {
   "title": "Просторный дом с садом",
-  "userId": "664edefd9a6d587d62439437"
+  "hostId": "664edefd9a6d587d62439437"
 }
 
 ###
