@@ -1,5 +1,4 @@
 import { Expose } from 'class-transformer';
-import { UserType } from '../../types/user.type.js';
 
 export class UserRdo {
   @Expose()
@@ -9,7 +8,7 @@ export class UserRdo {
   public email: string ;
 
   @Expose()
-  public type: UserType;
+  public type: string;
 
   @Expose()
   public avatarUrl: string;
