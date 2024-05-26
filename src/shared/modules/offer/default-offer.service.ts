@@ -90,7 +90,7 @@ export class DefaultOfferService implements OfferService {
 
   public async findFavorites(): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
-      .find({favorites: true})
+      .find({isFavorite: true})
       .sort({createdAt: SortType.Down})
       .populate(['hostId'])
       .exec();

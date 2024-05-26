@@ -42,14 +42,14 @@ export class OfferRdo {
   public goods: string;
 
   @Expose()
-  public rating: string;
-
-  @Expose()
-  public reviewCount: string;
-
-  @Expose()
   public location: string;
 
   @Expose()
   public hostId: string;
+
+  @Expose()
+  public rating: string;
+
+  @Expose()
+  public reviewCount: string;
 }
