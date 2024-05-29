@@ -22,7 +22,7 @@ export class UserController extends BaseController {
     super(logger);
     this.logger.info('Register routes for UserController…');
 
-    this.addRoute({ path: '/register', method: HttpMethod.Post, handler: this.create });
+    this.addRoute({path: '/register', method: HttpMethod.Post, handler: this.create});
     this.addRoute({path: '/login', method: HttpMethod.Post, handler: this.login});
   }
 
@@ -39,7 +39,6 @@ export class UserController extends BaseController {
         'UserController'
       );
     }
-    console.log(body.type);
 
     const result = await this.userService.create(body, this.configService.get('SALT'));
     this.created(res, fillDTO(UserRdo, result));
