@@ -9,6 +9,7 @@ import {OfferRdo} from './offer.rdo.js';
 import {UpdateOfferRequest} from './update-offer-request.type.js';
 import {StatusCodes} from 'http-status-codes';
 import {CreateOfferRequest} from './create-offer-requset.type.js';
+import { ParamOfferId } from './param-offerid.type.js';
 
 
 @injectable()
@@ -32,8 +33,7 @@ export class OfferController extends BaseController {
   public async index(_req: Request, res: Response): Promise<void> {
     const offers = await this.offerService.find();
     console.info(offers);
-    const responseData = fillDTO(OfferRdo, offers);
-    this.ok(res, responseData);
+    this.ok(res, fillDTO(OfferRdo, offers));
   }
 
   public async create(
@@ -46,9 +46,16 @@ export class OfferController extends BaseController {
   }
 
   public async update({body, params}: UpdateOfferRequest, res: Response): Promise<void> {
-    const offer = this.offerService.updateById(String(params.offerId), body);
-    const responseData = fillDTO(OfferRdo, offer);
-    this.ok(res, responseData);
+    const updatedOffer = this.offerService.updateById(String(params.offerId), body);
+    if (!updatedOffer) {
+      throw new HttpError(
+        StatusCodes.NOT_FOUND,
+        `Offer with id ${params.offerId} not found.`,
+        'OfferController'
+      );
+    }
+
+    this.ok(res, fillDTO(OfferRdo, updatedOffer));
   }
 
   public async delete({params}: Request, res: Response): Promise<void> {
@@ -65,13 +72,13 @@ export class OfferController extends BaseController {
     this.ok(res, existsOffer);
   }
 
-  public async indexId({params}: Request, res: Response): Promise<void> {
+  public async indexId({params}: Request<ParamOfferId>, res: Response): Promise<void> {
     const existsOffer = await this.offerService.findById(params.offerId);
 
     if (!existsOffer) {
       throw new HttpError(
         StatusCodes.NOT_FOUND,
-        `Offer with the specified ID:«${params.offer_id}» not found.`,
+        `Offer with the specified ID:«${params.offerId}» not found.`,
         'OfferController',
       );
     }
