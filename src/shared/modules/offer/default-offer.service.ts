@@ -11,6 +11,26 @@ import { Types } from 'mongoose';
 export const DEFAULT_OFFER_PREMIUM_COUNT = 3;
 export const DEFAULT_OFFER_COUNT = 60;
 
+const addReviewsToOffer = [
+  {
+    $lookup: {
+      from: 'reviews',
+      localField: '_id',
+      foreignField: 'offerId',
+      as: 'reviews',
+    }
+  },
+  {
+    $addFields: {
+      reviewCount: {$size: '$reviews'},
+      rating: {$avg: '$reviews.rating'},
+    }
+  },
+  {
+    $unset: 'reviews'
+  }
+];
+
 @injectable()
 export class DefaultOfferService implements OfferService {
   constructor(
@@ -30,23 +50,7 @@ export class DefaultOfferService implements OfferService {
       {
         $match: { _id: new Types.ObjectId(offerId) }
       },
-      {
-        $lookup: {
-          from: 'reviews',
-          localField: '_id',
-          foreignField: 'offerId',
-          as: 'reviews',
-        }
-      },
-      {
-        $addFields: {
-          reviewCount: {$size: '$reviews'},
-          rating: {$avg: '$reviews.rating'},
-        }
-      },
-      {
-        $unset: 'reviews'
-      }
+      ...addReviewsToOffer,
     ])
       .exec();
 
@@ -56,21 +60,7 @@ export class DefaultOfferService implements OfferService {
 
   public async find(count = DEFAULT_OFFER_COUNT): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel.aggregate([
-      {
-        $lookup: {
-          from: 'reviews',
-          localField: '_id',
-          foreignField: 'offerId',
-          as: 'reviews',
-        }
-      },
-      {
-        $addFields: {
-          reviewCount: {$size: '$reviews'},
-          rating: {$avg: '$reviews.rating'},
-        }
-      },
-      { $unset: ['reviews'] },
+      ...addReviewsToOffer,
       { $sort: { createdAt: SortType.Down } },
       { $limit: count },
     ])
@@ -85,7 +75,7 @@ export class DefaultOfferService implements OfferService {
   public async updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
       .findByIdAndUpdate(offerId, dto, {new: true})
-      .populate(['userId'])
+      .populate(['hostId'])
       .exec();
   }
 
@@ -94,15 +84,15 @@ export class DefaultOfferService implements OfferService {
       .find({isPremium: true})
       .sort({createdAt: SortType.Down})
       .limit(count)
-      .populate(['userId'])
+      .populate(['hostId'])
       .exec();
   }
 
   public async findFavorites(): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
-      .find({favorites: true})
+      .find({isFavorite: true})
       .sort({createdAt: SortType.Down})
-      .populate(['userId'])
+      .populate(['hostId'])
       .exec();
   }
 
