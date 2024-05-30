@@ -1,4 +1,4 @@
-import { OfferType, City, Location } from '../../types/index.js';
+import { OfferType, City, Location } from '../../../types/index.js';
 
 export class UpdateOfferDto {
   public title?: string;

@@ -1,4 +1,4 @@
-import { UserType } from '../../types/user.type.js';
+import { UserType } from '../../../types/user.type.js';
 
 export class CreateUserDto {
   public name: string;

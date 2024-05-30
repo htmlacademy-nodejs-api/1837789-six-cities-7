@@ -4,8 +4,8 @@ import { OfferService } from './offer-service.interface.js';
 import { Component, SortType } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { OfferEntity } from './offer.entity.js';
-import { CreateOfferDto } from './create-offer.dto.js';
-import { UpdateOfferDto } from './update-offer.dto.js';
+import { CreateOfferDto } from './dto/create-offer.dto.js';
+import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { Types } from 'mongoose';
 
 export const DEFAULT_OFFER_PREMIUM_COUNT = 3;
