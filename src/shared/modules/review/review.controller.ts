@@ -2,7 +2,8 @@ import {
   BaseController,
   HttpError,
   HttpMethod,
-  RequestQuery
+  RequestQuery,
+  ValidateObjectIdMiddleware
 } from '../../libs/rest/index.js';
 import { inject, injectable } from 'inversify';
 import { Component } from '../../types/index.js';
@@ -36,6 +37,9 @@ export class ReviewController extends BaseController {
       path: '/offerId',
       method: HttpMethod.Get,
       handler: this.findByOfferId,
+      middlewares: [
+        new ValidateObjectIdMiddleware('offerId'),
+      ]
     });
   }
 
