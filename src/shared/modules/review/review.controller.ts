@@ -61,7 +61,6 @@ export class ReviewController extends BaseController {
     }
 
     const review = this.reviewService.create(body);
-    await this.offerService.incReviewCount(body.offerId);
     this.created(res, fillDTO(ReviewRdo, review));
   }
 }

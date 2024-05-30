@@ -7,10 +7,6 @@ import { getMongoURI } from '../shared/helpers/index.js';
 import express, { Express } from 'express';
 import { Controller, ExceptionFilter } from '../shared/libs/rest/index.js';
 
-import { UserService } from '../shared/modules/user/user-service.interface.js';
-import { OfferService } from '../shared/modules/offer/offer-service.interface.js';
-import { ReviewService } from '../shared/modules/review/review-service.interface.js';
-
 @injectable()
 export class RestApplication {
   private readonly server: Express;
@@ -23,10 +19,6 @@ export class RestApplication {
     @inject(Component.UserController) private readonly userController: Controller,
     @inject(Component.OfferController) private readonly offerController: Controller,
     @inject(Component.ReviewController) private readonly reviewController: Controller,
-
-    @inject(Component.UserService) private readonly userService: UserService,
-    @inject(Component.OfferService) private readonly offerService: OfferService,
-    @inject(Component.ReviewService) private readonly reviewService: ReviewService,
   ) {
     this.server = express();
   }
@@ -86,22 +78,5 @@ export class RestApplication {
     this.logger.info(
       `🚀 Server started on http://localhost:${this.config.get('PORT')}`
     );
-
-    const offer = await this.offerService.findById('664ee08d0030834403a91fab');
-    console.log('offer', offer);
-
-    const result = await this.userService.findById('6652034305cfdb6e7e42ebbc');
-    console.log('user', result);
-
-    const review1 = await this.reviewService.create(
-      {
-        offerId: '6654b30510a74dfaf8eec537',
-        comment: 'Новый отзыв2',
-        publishDate: new Date('2024-04-30T13:05:42.068Z'),
-        rating: 5,
-        hostId: '6656d4e79e76066c486b948b'
-      }
-    );
-    console.log('review', review1);
   }
 }
