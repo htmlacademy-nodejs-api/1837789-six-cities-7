@@ -6,7 +6,7 @@ Content-Type: application/json
 
 {
   "offerId": "6658304a00fc2e6d599eed1b",
-  "comment": "Новый отзыв3",
+  "comment": "Новый отзыв5",
   "publishDate": "2024-04-30T13:05:42.068Z",
   "rating": 5,
   "hostId": "6658304a00fc2e6d599eed19"

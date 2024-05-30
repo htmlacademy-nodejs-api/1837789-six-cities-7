@@ -3,7 +3,8 @@ import {
   HttpError,
   HttpMethod,
   RequestQuery,
-  ValidateObjectIdMiddleware
+  ValidateObjectIdMiddleware,
+  ValidateDtoMiddleware
 } from '../../libs/rest/index.js';
 import { inject, injectable } from 'inversify';
 import { Component } from '../../types/index.js';
@@ -16,6 +17,7 @@ import { ReviewRdo } from './review.rdo.js';
 import { fillDTO } from '../../helpers/index.js';
 import { ParamOfferId } from '../offer/param-offerid.type.js';
 import { CreateReviewRequest } from './index.js';
+import { CreateReviewDto } from './dto/create-review.dto.js';
 
 @injectable()
 export class ReviewController extends BaseController {
@@ -32,6 +34,9 @@ export class ReviewController extends BaseController {
       path: '/',
       method: HttpMethod.Post,
       handler: this.create,
+      middlewares: [
+        new ValidateDtoMiddleware(CreateReviewDto)
+      ]
     });
     this.addRoute({
       path: '/offerId',

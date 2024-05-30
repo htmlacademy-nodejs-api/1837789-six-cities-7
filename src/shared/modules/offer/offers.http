@@ -10,7 +10,7 @@ POST http://localhost:5000/offers/ HTTP/1.1
 Content-Type: application/json
 
 {
-  "title": "Роскошный номер в отеле225",
+  "title": "Роскошный номер в отеле678",
   "description": "Уютная и светлая квартира с новым ремонтом, полностью меблированная. В шаговой доступности от метро и торговых центров.",
   "publicDate": "2024-04-30T13:05:42.068Z",
   "city": {
@@ -36,8 +36,8 @@ Content-Type: application/json
   "bedroom": 4,
   "price": 50555,
   "goods": [
-    "Кофемашина",
-    "Гладильная доска с утюгом"
+    "Breakfast",
+    "Laptop friendly workspace"
   ],
   "hostId": "6656d4e79e76066c486b948b",
   "location": {
@@ -64,7 +64,7 @@ Content-Type: application/json
 
 ## Редактирование предложения
 
-PUT  http://localhost:5000/offers/6656d4e79e76066c486b9488/ HTTP/1.1
+PUT  http://localhost:5000/offers/6658304a00fc2e6d599eed33/ HTTP/1.1
 Content-Type: application/json
 
 {

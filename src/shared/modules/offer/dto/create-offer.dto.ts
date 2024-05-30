@@ -17,7 +17,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { CreateOfferValidationMessage } from './create-offer.messages.js';
-import { GOODS, OFFER_TYPE, CITIES } from '../../../../consts.js';
+import { GOODS, OFFER_TYPE } from '../../../../consts.js';
 
 export class CreateOfferDto {
   @MinLength(10, { message: CreateOfferValidationMessage.title.minLength })
@@ -32,14 +32,7 @@ export class CreateOfferDto {
   @IsDateString({}, { message: CreateOfferValidationMessage.publicDate.invalidFormat })
   public publicDate: Date;
 
-  @IsIn(
-    [CITIES.Paris, CITIES.Cologne, CITIES.Brussels, CITIES.Amsterdam, CITIES.Hamburg, CITIES.Dusseldorf],
-    {
-      message: CreateOfferValidationMessage.city.name.invalidFormat,
-    },
-  )
-  @MinLength(1, { message: CreateOfferValidationMessage.city.name.minLength })
-  @MaxLength(100, { message: CreateOfferValidationMessage.city.name.maxLength })
+  @ValidateNested()
   public city: City;
 
   @IsUrl(

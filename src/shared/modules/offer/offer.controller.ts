@@ -18,7 +18,7 @@ import {CreateOfferRequest} from './create-offer-requset.type.js';
 import { ParamOfferId } from './param-offerid.type.js';
 import { ReviewRdo, ReviewService } from '../review/index.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
-
+import { UpdateOfferDto } from './dto/update-offer.dto.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -33,14 +33,21 @@ export class OfferController extends BaseController {
     this.logger.info('Register routes for OfferController…');
 
     this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
-    this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create});
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [
+        new ValidateDtoMiddleware(CreateOfferDto),
+      ]
+    });
     this.addRoute({
       path: '/:offerId',
       method: HttpMethod.Put,
       handler: this.update,
       middlewares: [
         new ValidateObjectIdMiddleware('offerId'),
-        new ValidateDtoMiddleware(CreateOfferDto)
+        new ValidateDtoMiddleware(UpdateOfferDto),
       ]
     });
     this.addRoute({
