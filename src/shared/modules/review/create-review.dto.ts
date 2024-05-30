@@ -4,5 +4,5 @@ export class CreateReviewDto {
   public comment: string;
   public publishDate: Date;
   public rating: number;
-  public userId: string;
+  public hostId: string;
 }

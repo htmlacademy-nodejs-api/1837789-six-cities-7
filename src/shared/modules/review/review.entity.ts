@@ -26,8 +26,8 @@ export class ReviewEntity extends defaultClasses.TimeStamps {
   @prop({required: true})
   public rating: number;
 
-  @prop({required: true, type: UserEntity})
-  public userId: Ref<UserEntity>;
+  @prop({required: true, ref: UserEntity})
+  public hostId: Ref<UserEntity>;
 }
 
 export const ReviewModel = getModelForClass(ReviewEntity);

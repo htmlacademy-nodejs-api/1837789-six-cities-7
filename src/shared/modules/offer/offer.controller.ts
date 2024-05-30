@@ -63,7 +63,6 @@ export class OfferController extends BaseController {
 
   public async index(_req: Request, res: Response): Promise<void> {
     const offers = await this.offerService.find();
-    console.info(offers);
     this.ok(res, fillDTO(OfferRdo, offers));
   }
 
