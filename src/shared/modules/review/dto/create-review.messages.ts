@@ -1,4 +1,4 @@
-export const CreatereviewMessages = {
+export const CreateReviewMessages = {
   offerId: {
     invalidFormat: 'offerId field must be a valid id'
   },

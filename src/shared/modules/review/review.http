@@ -5,11 +5,11 @@ POST  http://localhost:5000/reviews/ HTTP/1.1
 Content-Type: application/json
 
 {
-  "offerId": "6658304a00fc2e6d599eed1b",
-  "comment": "Новый отзыв5",
+  "offerId": "66587fe58b1bc411de595c21",
+  "comment": "An independent House, strategically located between Rembrand Square and National Opera,",
   "publishDate": "2024-04-30T13:05:42.068Z",
   "rating": 5,
-  "hostId": "6658304a00fc2e6d599eed19"
+  "hostId": "66587fe58b1bc411de595c03"
 }
 
 ###
