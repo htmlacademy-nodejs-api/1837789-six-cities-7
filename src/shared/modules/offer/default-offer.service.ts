@@ -80,11 +80,26 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async findPremium(count = DEFAULT_OFFER_PREMIUM_COUNT): Promise<DocumentType<OfferEntity>[]> {
-    return this.offerModel
-      .find({isPremium: true})
-      .sort({createdAt: SortType.Down})
-      .limit(count)
-      .populate(['hostId'])
+    return this.offerModel.aggregate([
+      {
+        $match: {isPremium: true}
+      },
+      ...addReviewsToOffer,
+      {$sort: {createdAt: SortType.Down}},
+      {$limit: count},
+    ])
+      .exec();
+  }
+
+  public async findPremiumByCity(cityName: string): Promise<DocumentType<OfferEntity>[]> {
+    return this.offerModel.aggregate([
+      {
+        $match: {name: cityName}
+      },
+      ...addReviewsToOffer,
+      {$sort: {createdAt: SortType.Down}},
+      {$limit: DEFAULT_OFFER_PREMIUM_COUNT},
+    ])
       .exec();
   }
 

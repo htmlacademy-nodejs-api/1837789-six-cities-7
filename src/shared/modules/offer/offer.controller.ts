@@ -35,6 +35,16 @@ export class OfferController extends BaseController {
 
     this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
     this.addRoute({
+      path: '/premium',
+      method: HttpMethod.Get,
+      handler: this.showPremiumOffers
+    });
+    this.addRoute({
+      path: '/premium/:cityName',
+      method: HttpMethod.Get,
+      handler: this.showPremiumOffersbyCity
+    });
+    this.addRoute({
       path: '/',
       method: HttpMethod.Post,
       handler: this.create,
@@ -71,8 +81,9 @@ export class OfferController extends BaseController {
     });
   }
 
-  public async index(_req: Request, res: Response): Promise<void> {
-    const offers = await this.offerService.find();
+  public async index({query}: Request, res: Response): Promise<void> {
+    const count = typeof query.count === 'string' ? parseInt(query.count, 10) : undefined;
+    const offers = await this.offerService.find(count);
     this.ok(res, fillDTO(OfferRdo, offers));
   }
 
@@ -103,5 +114,16 @@ export class OfferController extends BaseController {
   public async getReviews({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
     const reviews = await this.reviewService.findByOfferId(params.offerId);
     this.ok(res, fillDTO(ReviewRdo, reviews));
+  }
+
+  public async showPremiumOffers({query}: Request, res: Response): Promise<void> {
+    const count = typeof query.count === 'string' ? parseInt(query.count, 10) : undefined;
+    const offers = await this.offerService.findPremium(count);
+    this.ok(res, fillDTO(OfferRdo, offers));
+  }
+
+  public async showPremiumOffersbyCity({ params }: Request, res: Response): Promise<void> {
+    const offers = await this.offerService.findPremiumByCity(params.cityName);
+    this.ok(res, fillDTO(OfferRdo, offers));
   }
 }
