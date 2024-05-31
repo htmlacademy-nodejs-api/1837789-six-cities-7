@@ -4,6 +4,7 @@ import {
   HttpMethod,
   ValidateDtoMiddleware,
   ValidateObjectIdMiddleware,
+  DocumentExistsMiddleware,
 } from '../../libs/rest/index.js';
 import {Component} from '../../types/index.js';
 import {inject, injectable} from 'inversify';
@@ -32,7 +33,7 @@ export class OfferController extends BaseController {
 
     this.logger.info('Register routes for OfferController…');
 
-    const middlewares = [new ValidateObjectIdMiddleware('offerId')];
+    const middlewares = [new ValidateObjectIdMiddleware('offerId'), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')];
 
     this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
     this.addRoute({
