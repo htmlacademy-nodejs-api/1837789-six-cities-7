@@ -5,10 +5,10 @@ POST http://localhost:5000/users/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "name": "Ioakim",
+  "name": "Ben",
   "password": "1234567",
-  "email": "Ioakim@example.com",
-  "type": "pro",
+  "email": "ben@example.com",
+  "type": "usual",
   "avatarUrl": "torrance.png"
 }
 
@@ -20,8 +20,8 @@ POST http://localhost:5000/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "elena@example.com",
-  "password": "154e752c73b3eda9a803782455f497c099247c4459ed7be22aedc5125489ba84"
+  "email": "ben@example.com",
+  "password": "1234567"
 }
 
 ###

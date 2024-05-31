@@ -32,6 +32,8 @@ export class OfferController extends BaseController {
 
     this.logger.info('Register routes for OfferController…');
 
+    const middlewares = [new ValidateObjectIdMiddleware('offerId')];
+
     this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
     this.addRoute({
       path: '/',
@@ -46,7 +48,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.Put,
       handler: this.update,
       middlewares: [
-        new ValidateObjectIdMiddleware('offerId'),
+        ...middlewares,
         new ValidateDtoMiddleware(UpdateOfferDto),
       ]
     });
@@ -54,25 +56,19 @@ export class OfferController extends BaseController {
       path: '/:offerId',
       method: HttpMethod.Delete,
       handler: this.delete,
-      middlewares: [
-        new ValidateObjectIdMiddleware('offerId'),
-      ]
+      middlewares
     });
     this.addRoute({
       path: '/:offerId',
       method: HttpMethod.Get,
       handler: this.indexId,
-      middlewares: [
-        new ValidateObjectIdMiddleware('offerId'),
-      ]
+      middlewares
     });
     this.addRoute({
       path: '/:offerId/reviews',
       method: HttpMethod.Get,
       handler: this.getReviews,
-      middlewares: [
-        new ValidateObjectIdMiddleware('offerId'),
-      ]
+      middlewares
     });
   }
 
@@ -91,7 +87,7 @@ export class OfferController extends BaseController {
   }
 
   public async update({body, params}: UpdateOfferRequest, res: Response): Promise<void> {
-    const updatedOffer = this.offerService.updateById(String(params.offerId), body);
+    const updatedOffer = await this.offerService.updateById(String(params.offerId), body);
     if (!updatedOffer) {
       throw new HttpError(
         StatusCodes.NOT_FOUND,

@@ -15,5 +15,6 @@ export const CreateUserMessages = {
   },
   avatarUrl: {
     invalidFormat: 'avatarUrl is required',
+    isUrl: 'AvatarUrl must be a valid URL',
   }
-} as const;
+};

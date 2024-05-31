@@ -9,7 +9,7 @@ export class CreateReviewDto {
   @Length(5, 1024, {message: CreateReviewMessages.comment.lengthField})
   public comment: string;
 
-  @IsDateString({}, { message: CreateReviewMessages.publishDate.invalidFormat })
+  @IsDateString({strict: true}, { message: CreateReviewMessages.publishDate.invalidFormat })
   public publishDate: Date;
 
   @IsInt({message: CreateReviewMessages.rating.invalidFormat})

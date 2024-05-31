@@ -1,13 +1,14 @@
-import { OfferType, City, Location } from '../../../types/index.js';
+import { OfferType, City, Location, CityValidation, LocationValidation } from '../../../types/index.js';
+import { Type } from 'class-transformer';
 import {
   ArrayMaxSize,
   ArrayMinSize,
   IsArray, IsBoolean,
   IsDateString,
-  IsIn,
   IsInt,
   IsMongoId,
   IsOptional,
+  IsString,
   IsUrl,
   Matches,
   Max,
@@ -15,38 +16,38 @@ import {
   Min,
   MinLength,
   ValidateNested,
+  IsEnum,
+  IsNumber,
 } from 'class-validator';
 import { CreateOfferValidationMessage } from './create-offer.messages.js';
-import { GOODS, OFFER_TYPE } from '../../../../consts.js';
+import { GoodsEnum, OfferTypeEnum } from '../../../../consts.js';
 
 export class CreateOfferDto {
   @MinLength(10, { message: CreateOfferValidationMessage.title.minLength })
   @MaxLength(100, { message: CreateOfferValidationMessage.title.maxLength })
+  @IsString({ message: CreateOfferValidationMessage.title.isString})
   public title: string;
 
   @MinLength(20, { message: CreateOfferValidationMessage.description.minLength })
   @MaxLength(1024, { message: CreateOfferValidationMessage.description.maxLength })
+  @IsString({ message: CreateOfferValidationMessage.description.isString})
   public description: string;
 
   @IsOptional()
-  @IsDateString({}, { message: CreateOfferValidationMessage.publicDate.invalidFormat })
+  @IsDateString({strict: true}, { message: CreateOfferValidationMessage.publicDate.invalidFormat })
   public publicDate: Date;
 
   @ValidateNested()
+  @Type(() => CityValidation)
   public city: City;
 
-  @IsUrl(
-    {},
-    {
-      message: CreateOfferValidationMessage.previewImage.isUrl,
-    },
-  )
-  @Matches(/\.(jpg|png)(\?.*)?$/i, {
-    message: CreateOfferValidationMessage.previewImage.matches,
-  })
+  @IsUrl({}, { message: CreateOfferValidationMessage.previewImage.isUrl })
+  @IsString({ message: CreateOfferValidationMessage.previewImage.isString})
+  @Matches(/\.(jpg|png)(\?.*)?$/i, { message: CreateOfferValidationMessage.previewImage.matches })
   public previewImage: string;
 
   @IsArray({ message: CreateOfferValidationMessage.images.invalidFormat })
+  @IsString({each: true, message: CreateOfferValidationMessage.images.isString})
   @ArrayMinSize(6, { message: CreateOfferValidationMessage.images.ArrayMinSize })
   @ArrayMaxSize(6, { message: CreateOfferValidationMessage.images.ArrayMaxSize })
   public images: string[];
@@ -57,9 +58,7 @@ export class CreateOfferDto {
   @IsBoolean({ message: CreateOfferValidationMessage.isFavorite.invalidFormat })
   public isFavorite: boolean;
 
-  @IsIn([OFFER_TYPE.House, OFFER_TYPE.Apartment, OFFER_TYPE.Hotel, OFFER_TYPE.Room], {
-    message: CreateOfferValidationMessage.type.invalidFormat,
-  })
+  @IsEnum(OfferTypeEnum, {message: CreateOfferValidationMessage.type.invalidFormat})
   public type: OfferType;
 
   @IsInt({ message: CreateOfferValidationMessage.room.invalidFormat })
@@ -72,32 +71,20 @@ export class CreateOfferDto {
   @Max(10, { message: CreateOfferValidationMessage.bedroom.maxValue })
   public bedroom: number;
 
-  @IsInt({ message: CreateOfferValidationMessage.price.invalidFormat })
+  @IsNumber({}, {message: CreateOfferValidationMessage.price.isNumber})
   @Min(100, { message: CreateOfferValidationMessage.price.minValue })
   @Max(100000, { message: CreateOfferValidationMessage.price.maxValue })
   public price: number;
 
   @IsArray({ message: CreateOfferValidationMessage.goods.invalidFormat })
-  @IsIn(
-    [
-      GOODS.Breakfast,
-      GOODS.AirConditioning,
-      GOODS.LaptopFriendlyWorkspace,
-      GOODS.BabySeat,
-      GOODS.Washer,
-      GOODS.Towels,
-      GOODS.Fridge,
-    ],
-    {
-      each: true,
-      message: CreateOfferValidationMessage.goods.invalidFormat,
-    },
-  )
+  @IsString({each: true, message: CreateOfferValidationMessage.goods.isString})
+  @IsEnum(GoodsEnum, {each: true, message: CreateOfferValidationMessage.goods.isEnum})
   public goods: string[];
 
   @IsMongoId({ message: CreateOfferValidationMessage.hostId.invalidId })
   public hostId: string;
 
   @ValidateNested()
+  @Type(() => LocationValidation)
   public location: Location;
 }

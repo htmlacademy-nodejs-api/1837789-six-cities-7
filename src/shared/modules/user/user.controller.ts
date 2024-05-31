@@ -27,7 +27,7 @@ export class UserController extends BaseController {
     this.addRoute({
       path: '/register',
       method: HttpMethod.Post,
-      handler: this.create,
+      handler: this.register,
       middlewares: [new ValidateDtoMiddleware(CreateUserDto)]});
     this.addRoute({
       path: '/login',
@@ -37,7 +37,7 @@ export class UserController extends BaseController {
     });
   }
 
-  public async create(
+  public async register(
     { body }: CreateUserRequest,
     res: Response
   ): Promise<void> {
