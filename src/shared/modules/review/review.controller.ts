@@ -4,7 +4,8 @@ import {
   HttpMethod,
   RequestQuery,
   ValidateObjectIdMiddleware,
-  ValidateDtoMiddleware
+  ValidateDtoMiddleware,
+  DocumentExistsMiddleware
 } from '../../libs/rest/index.js';
 import { inject, injectable } from 'inversify';
 import { Component } from '../../types/index.js';
@@ -44,6 +45,7 @@ export class ReviewController extends BaseController {
       handler: this.findByOfferId,
       middlewares: [
         new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'id'),
       ]
     });
   }
