@@ -55,6 +55,7 @@ export class UpdateOfferDto {
   @IsString({each: true, message: CreateUpdateOfferMessage.images.isString})
   @ArrayMinSize(6, { message: CreateUpdateOfferMessage.images.ArrayMinSize })
   @ArrayMaxSize(6, { message: CreateUpdateOfferMessage.images.ArrayMaxSize })
+  @IsUrl({}, {each: true, message: CreateUpdateOfferMessage.images.isUrl })
   public images?: string[];
 
   @IsOptional()

@@ -50,6 +50,7 @@ export class CreateOfferDto {
   @IsString({each: true, message: CreateOfferValidationMessage.images.isString})
   @ArrayMinSize(6, { message: CreateOfferValidationMessage.images.ArrayMinSize })
   @ArrayMaxSize(6, { message: CreateOfferValidationMessage.images.ArrayMaxSize })
+  @IsUrl({}, {each: true, message: CreateOfferValidationMessage.images.isUrl })
   public images: string[];
 
   @IsBoolean({ message: CreateOfferValidationMessage.isPremium.invalidFormat })

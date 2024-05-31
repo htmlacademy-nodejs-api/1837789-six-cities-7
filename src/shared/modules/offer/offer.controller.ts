@@ -1,6 +1,5 @@
 import {
   BaseController,
-  HttpError,
   HttpMethod,
   ValidateDtoMiddleware,
   ValidateObjectIdMiddleware,
@@ -14,7 +13,6 @@ import {OfferService} from './offer-service.interface.js';
 import {fillDTO} from '../../helpers/index.js';
 import {OfferRdo} from './offer.rdo.js';
 import {UpdateOfferRequest} from './update-offer-request.type.js';
-import {StatusCodes} from 'http-status-codes';
 import {CreateOfferRequest} from './create-offer-requset.type.js';
 import { ParamOfferId } from './param-offerid.type.js';
 import { ReviewRdo, ReviewService } from '../review/index.js';
@@ -49,8 +47,8 @@ export class OfferController extends BaseController {
       method: HttpMethod.Put,
       handler: this.update,
       middlewares: [
-        ...middlewares,
         new ValidateDtoMiddleware(UpdateOfferDto),
+        ...middlewares,
       ]
     });
     this.addRoute({
@@ -89,54 +87,20 @@ export class OfferController extends BaseController {
 
   public async update({body, params}: UpdateOfferRequest, res: Response): Promise<void> {
     const updatedOffer = await this.offerService.updateById(String(params.offerId), body);
-    if (!updatedOffer) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Offer with id ${params.offerId} not found.`,
-        'OfferController'
-      );
-    }
-
     this.ok(res, fillDTO(OfferRdo, updatedOffer));
   }
 
   public async delete({params}: Request, res: Response): Promise<void> {
     const existsOffer = await this.offerService.deleteById(params.offerId);
-
-    if (!existsOffer) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Offer with the specified ID:«${params.offerId}» not found.`,
-        'OfferController',
-      );
-    }
-
     this.ok(res, existsOffer);
   }
 
   public async indexId({params}: Request<ParamOfferId>, res: Response): Promise<void> {
     const existsOffer = await this.offerService.findById(params.offerId);
-
-    if (!existsOffer) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Offer with the specified ID:«${params.offerId}» not found.`,
-        'OfferController',
-      );
-    }
-
     this.ok(res, fillDTO(OfferRdo, existsOffer));
   }
 
   public async getReviews({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
-    if (!await this.offerService.exists(params.offerId)) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Offer with id ${params.offerId} not found.`,
-        'OfferController'
-      );
-    }
-
     const reviews = await this.reviewService.findByOfferId(params.offerId);
     this.ok(res, fillDTO(ReviewRdo, reviews));
   }
