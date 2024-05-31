@@ -1,5 +1,5 @@
-export { City } from './city.type.js';
-export { Location } from './location.type.js';
+export { City, CityValidation } from './city.type.js';
+export { Location, LocationValidation } from './location.type.js';
 export { User } from './user.type.js';
 export { UserType } from './user.type.js';
 export { OfferType } from './offer.type.js';

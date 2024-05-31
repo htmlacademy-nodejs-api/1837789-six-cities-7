@@ -1,17 +1,19 @@
 {
   "api": {
     "titles": [
-      "Уютная квартира в центре",
-      "Просторный дом с садом",
-      "Комната в современном стиле",
-      "Роскошный номер в отеле"
+      "Nice, cozy, warm big bed apartment",
+      "Beautiful &amp; luxurious apartment at great location",
+      "Canal View Prinsengracht",
+      "Wood and stone place",
+      "Luxurious apartment at great location",
+      "Beautiful &amp; luxurious apartment at great location"
     ],
     "descriptions": [
-      "Уютная и светлая квартира с новым ремонтом, полностью меблированная. В шаговой доступности от метро и торговых центров.",
-      "Просторная квартира с панорамными окнами, современным дизайном и встроенной техникой на кухне. Идеальный вариант для семьи.",
-      "Комфортабельная студия в центре города с высокоскоростным интернетом и кондиционером. Идеально подходит для студентов или молодых профессионалов.",
-      "Элегантная квартира с двумя спальнями, камином в гостиной и видом на парк. Район с развитой инфраструктурой и удобной транспортной доступностью.",
-      "Современная студия с дизайнерским ремонтом, барной стойкой и встроенными шкафами. Расположена в тихом районе, идеально для тех, кто ценит комфорт и уединение."
+      "A quiet cozy and picturesque that hides behind a river by the unique lightness of Amsterdam.",
+      "An independent House, strategically located between Rembrand Square and National Opera, but where the bustle of the city comes to rest in this alley flowery and colorful.",
+      "A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.",
+      "An independent House, strategically located between Rembrand Square and National Opera, but where the bustle of the city comes to rest in this alley flowery.",
+      "The building is green and from 18th century, but where the bustle of the city comes to rest in this alley flowery and colorful."
     ],
     "cities": [
       {
@@ -90,23 +92,20 @@
       "hotel"
     ],
     "goods": [
-      "Wi-Fi",
-      "Посудомоечная машина",
-      "Телевизор",
-      "Кондиционер",
-      "Кухня",
-      "Стиральная машина",
-      "Микроволновая печь",
-      "Холодильник",
-      "Кофемашина",
-      "Гладильная доска с утюгом"
+      "Breakfast",
+      "Air conditioning",
+      "Laptop friendly workspace",
+      "Baby seat",
+      "Washer",
+      "Towels",
+      "Fridge"
     ],
     "hostNames": [
-      "Иван Иванов",
-      "Елена Петрова",
-      "Алексей Смирнов",
-      "Мария Васильева",
-      "Дмитрий Кузнецов"
+      "Alex",
+      "Marina",
+      "Tanya",
+      "Jon",
+      "Hulk"
     ],
     "hostEmails": [
       "ivan@example.com",
@@ -130,7 +129,7 @@
       "password5"
     ],
     "hostTypes": [
-      "обычный",
+      "usual",
       "pro"
     ],
     "locations": [

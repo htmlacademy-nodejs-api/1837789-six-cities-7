@@ -29,7 +29,7 @@ export class DefaultReviewService implements ReviewService {
       .find({offerId})
       .sort({createdAt: SortType.Down})
       .limit(limit)
-      .populate('userId');
+      .populate('hostId');
   }
 
   public async deleteByOfferId(offerId: string): Promise<number | null> {

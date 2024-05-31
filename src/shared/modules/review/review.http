@@ -1,0 +1,15 @@
+# REVIEWS
+## Создание отзыва
+
+POST  http://localhost:5000/reviews/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "offerId": "66587fe58b1bc411de595c1b",
+  "comment": "An independent House, strategically located between Rembrand Square and National Opera,",
+  "publishDate": "2024-04-30T13:05:42.068Z",
+  "rating": 3,
+  "hostId": "66587fe58b1bc411de595c0d"
+}
+
+###
