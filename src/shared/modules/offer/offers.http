@@ -50,7 +50,7 @@ Content-Type: application/json
 
 ## Детальная информация по предложению.
 
-GET  http://localhost:5000/offers/66587fe58b1bc411de595c1b/ HTTP/1.1
+GET  http://localhost:5000/offers/66587fe58b1bc411de595c06/ HTTP/1.1
 Content-Type: application/json
 
 ###
