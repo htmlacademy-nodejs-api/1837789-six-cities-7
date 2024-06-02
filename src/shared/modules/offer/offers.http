@@ -74,14 +74,8 @@ Content-Type: application/json
 
 ###
 
-## Получить список премиальных предложений
-GET http://localhost:5000/offers/premium/?count=2" HTTP/1.1
-Content-Type: application/json
-
-###
-
 ## Получить список премиальных предложений по городу
-GET http://localhost:5000/offers/premium/Paris/" HTTP/1.1
+GET http://localhost:5000/offers/premium/?cityName=Hamburg HTTP/1.1
 Content-Type: application/json
 
 ###
