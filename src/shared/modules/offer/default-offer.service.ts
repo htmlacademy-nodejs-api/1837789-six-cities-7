@@ -79,18 +79,6 @@ export class DefaultOfferService implements OfferService {
       .exec();
   }
 
-  public async findPremium(): Promise<DocumentType<OfferEntity>[]> {
-    return this.offerModel.aggregate([
-      {
-        $match: {isPremium: true}
-      },
-      ...addReviewsToOffer,
-      {$sort: {createdAt: SortType.Down}},
-      {$limit: DEFAULT_OFFER_PREMIUM_COUNT},
-    ])
-      .exec();
-  }
-
   public async findPremiumByCity(cityName: string): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel.aggregate([
       {
