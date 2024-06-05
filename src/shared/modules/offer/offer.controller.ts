@@ -1,9 +1,9 @@
 import {
   BaseController,
-  HttpError,
   HttpMethod,
   ValidateDtoMiddleware,
   ValidateObjectIdMiddleware,
+  DocumentExistsMiddleware,
 } from '../../libs/rest/index.js';
 import {Component} from '../../types/index.js';
 import {inject, injectable} from 'inversify';
@@ -13,7 +13,6 @@ import {OfferService} from './offer-service.interface.js';
 import {fillDTO} from '../../helpers/index.js';
 import {OfferRdo} from './offer.rdo.js';
 import {UpdateOfferRequest} from './update-offer-request.type.js';
-import {StatusCodes} from 'http-status-codes';
 import {CreateOfferRequest} from './create-offer-requset.type.js';
 import { ParamOfferId } from './param-offerid.type.js';
 import { ReviewRdo, ReviewService } from '../review/index.js';
@@ -32,9 +31,14 @@ export class OfferController extends BaseController {
 
     this.logger.info('Register routes for OfferController…');
 
-    const middlewares = [new ValidateObjectIdMiddleware('offerId')];
+    const middlewares = [new ValidateObjectIdMiddleware('offerId'), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')];
 
     this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
+    this.addRoute({
+      path: '/premium',
+      method: HttpMethod.Get,
+      handler: this.showPremiumOffersbyCity
+    });
     this.addRoute({
       path: '/',
       method: HttpMethod.Post,
@@ -48,8 +52,8 @@ export class OfferController extends BaseController {
       method: HttpMethod.Put,
       handler: this.update,
       middlewares: [
-        ...middlewares,
         new ValidateDtoMiddleware(UpdateOfferDto),
+        ...middlewares,
       ]
     });
     this.addRoute({
@@ -72,8 +76,9 @@ export class OfferController extends BaseController {
     });
   }
 
-  public async index(_req: Request, res: Response): Promise<void> {
-    const offers = await this.offerService.find();
+  public async index({query}: Request, res: Response): Promise<void> {
+    const count = typeof query.count === 'string' ? parseInt(query.count, 10) : undefined;
+    const offers = await this.offerService.find(count);
     this.ok(res, fillDTO(OfferRdo, offers));
   }
 
@@ -88,55 +93,26 @@ export class OfferController extends BaseController {
 
   public async update({body, params}: UpdateOfferRequest, res: Response): Promise<void> {
     const updatedOffer = await this.offerService.updateById(String(params.offerId), body);
-    if (!updatedOffer) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Offer with id ${params.offerId} not found.`,
-        'OfferController'
-      );
-    }
-
     this.ok(res, fillDTO(OfferRdo, updatedOffer));
   }
 
   public async delete({params}: Request, res: Response): Promise<void> {
     const existsOffer = await this.offerService.deleteById(params.offerId);
-
-    if (!existsOffer) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Offer with the specified ID:«${params.offerId}» not found.`,
-        'OfferController',
-      );
-    }
-
     this.ok(res, existsOffer);
   }
 
   public async indexId({params}: Request<ParamOfferId>, res: Response): Promise<void> {
     const existsOffer = await this.offerService.findById(params.offerId);
-
-    if (!existsOffer) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Offer with the specified ID:«${params.offerId}» not found.`,
-        'OfferController',
-      );
-    }
-
     this.ok(res, fillDTO(OfferRdo, existsOffer));
   }
 
   public async getReviews({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
-    if (!await this.offerService.exists(params.offerId)) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Offer with id ${params.offerId} not found.`,
-        'OfferController'
-      );
-    }
-
     const reviews = await this.reviewService.findByOfferId(params.offerId);
     this.ok(res, fillDTO(ReviewRdo, reviews));
+  }
+
+  public async showPremiumOffersbyCity({ query }: Request, res: Response): Promise<void> {
+    const offers = await this.offerService.findPremiumByCity(query.cityName as string);
+    this.ok(res, fillDTO(OfferRdo, offers));
   }
 }

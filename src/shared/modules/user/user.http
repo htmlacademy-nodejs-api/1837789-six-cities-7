@@ -5,11 +5,11 @@ POST http://localhost:5000/users/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "name": "Ben",
+  "name": "Alina",
   "password": "1234567",
-  "email": "ben@example.com",
+  "email": "alina@example.com",
   "type": "usual",
-  "avatarUrl": "torrance.png"
+  "avatarUrl": "https://15.design.htmlacademy.pro/static/avatar/4.jpg"
 }
 
 ###
@@ -25,3 +25,17 @@ Content-Type: application/json
 }
 
 ###
+
+## Отправить изображение
+
+POST http://localhost:5000/users/6659d6ab23b3ac559235710f/avatar HTTP/1.1
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="avatar"; filename="screen.png"
+Content-Type: image/png
+
+< /Users/user/Desktop/myAvatar.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+##
