@@ -39,3 +39,11 @@ Content-Type: image/png
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ##
+
+###
+
+## Проверить токен пользователя
+GET http://localhost:5000/users/login HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJlbkBleGFtcGxlLmNvbSIsIm5hbWUiOiJCZW4iLCJpZCI6IjY2NTk3ZWY3ZTEyYzIzMmI3Yjc5ZjJlZCIsImlhdCI6MTcxNzY0OTc3OCwiZXhwIjoxNzE3ODIyNTc4fQ.yuQNJf9x5bRNI2_Y0bd_1eWWgGx8lSJ4aX5VECbvmuA
+
+###
