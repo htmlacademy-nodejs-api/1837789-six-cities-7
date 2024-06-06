@@ -82,7 +82,6 @@ export class CreateOfferDto {
   @IsEnum(GoodsEnum, {each: true, message: CreateOfferValidationMessage.goods.isEnum})
   public goods: string[];
 
-  @IsMongoId({ message: CreateOfferValidationMessage.hostId.invalidId })
   public hostId: string;
 
   @ValidateNested()
