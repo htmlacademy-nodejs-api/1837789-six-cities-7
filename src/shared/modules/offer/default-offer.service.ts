@@ -68,11 +68,13 @@ export class DefaultOfferService implements OfferService {
     return result;
   }
 
-  public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+  public async findById(offerId: string, currentHostId?: string): Promise<DocumentType<OfferEntity> | null> {
+    const isFavorite = !(currentHostId === undefined);
     const result = await this.offerModel.aggregate([
       {
         $match: { _id: new Types.ObjectId(offerId) }
       },
+      {$set: {isFavorite: isFavorite}},
       ...addReviewsToOffer,
       ...authorPipeline,
     ])
@@ -82,12 +84,15 @@ export class DefaultOfferService implements OfferService {
     return result[0] ?? null;
   }
 
-  public async find(count = DEFAULT_OFFER_COUNT): Promise<DocumentType<OfferEntity>[]> {
+  public async find(currentHostId?: string, count?: number,): Promise<DocumentType<OfferEntity>[]> {
+    const limit = count || DEFAULT_OFFER_COUNT;
+    const isFavorite = !(currentHostId === undefined);
     return this.offerModel.aggregate([
+      {$set: {isFavorite: isFavorite}},
       ...addReviewsToOffer,
       ...authorPipeline,
       { $sort: { createdAt: SortType.Down } },
-      { $limit: count },
+      { $limit: limit },
     ])
       .exec();
   }
@@ -138,11 +143,11 @@ export class DefaultOfferService implements OfferService {
       .exec();
   }
 
-  public async toggleFavorite(userId: string, offerId: string, isFavorite: boolean): Promise<boolean> {
-    const user = await this.userModel.findById(userId).exec();
+  public async toggleFavorite(hostId: string, offerId: string, isFavorite: boolean): Promise<boolean> {
+    const user = await this.userModel.findById(hostId).exec();
 
     if (!user) {
-      throw new HttpError(StatusCodes.NOT_FOUND, `User with id ${userId} not found.`, 'DefaultOfferService');
+      throw new HttpError(StatusCodes.NOT_FOUND, `User with id ${hostId} not found.`, 'DefaultOfferService');
     }
 
     const offerObjectId = new Types.ObjectId(offerId);

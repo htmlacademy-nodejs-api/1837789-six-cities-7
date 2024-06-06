@@ -100,9 +100,8 @@ export class OfferController extends BaseController {
     });
   }
 
-  public async index({query}: Request, res: Response): Promise<void> {
-    const count = typeof query.count === 'string' ? parseInt(query.count, 10) : undefined;
-    const offers = await this.offerService.find(count);
+  public async index({tokenPayload}: Request<ParamOfferId>, res: Response): Promise<void> {
+    const offers = await this.offerService.find(tokenPayload?.id);
     this.ok(res, fillDTO(OfferRdo, offers));
   }
 
