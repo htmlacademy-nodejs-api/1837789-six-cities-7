@@ -5,6 +5,7 @@ import {
   ValidateObjectIdMiddleware,
   DocumentExistsMiddleware,
   PrivateRouteMiddleware,
+  RequestBody
 } from '../../libs/rest/index.js';
 import {Component} from '../../types/index.js';
 import {inject, injectable} from 'inversify';
@@ -80,6 +81,23 @@ export class OfferController extends BaseController {
       handler: this.getReviews,
       middlewares
     });
+    this.addRoute({
+      path: '/favorites',
+      method: HttpMethod.Get,
+      handler: this.showFavoritesOffers,
+      middlewares: [
+        new PrivateRouteMiddleware()
+      ]
+    });
+    this.addRoute({
+      path: '/:offerId/favorites',
+      method: HttpMethod.Put,
+      handler: this.updateFavorite,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        ...middlewares,
+      ],
+    });
   }
 
   public async index({query}: Request, res: Response): Promise<void> {
@@ -120,5 +138,25 @@ export class OfferController extends BaseController {
   public async showPremiumOffersByCity({ query }: Request, res: Response): Promise<void> {
     const offers = await this.offerService.findPremiumByCity(query.cityName as string);
     this.ok(res, fillDTO(OfferRdo, offers));
+  }
+
+  public async showFavoritesOffers({tokenPayload: { id }}: Request, res: Response): Promise<void> {
+    const offers = await this.offerService.findFavorites(id);
+    this.ok(res, fillDTO(OfferRdo, offers));
+  }
+
+  public async updateFavorite(
+    { params, tokenPayload, body }: Request<ParamOfferId, RequestBody, { favorites: string }>,
+    res: Response,
+  ): Promise<void> {
+    const { offerId } = params;
+    const isFavorite = body.favorites === 'true';
+    const hostId = tokenPayload.id;
+
+    const offer = await this.offerService.toggleFavorite(hostId, offerId, isFavorite);
+
+    this.ok(res, {
+      favorites: offer,
+    });
   }
 }

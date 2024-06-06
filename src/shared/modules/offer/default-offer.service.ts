@@ -4,9 +4,12 @@ import { OfferService } from './offer-service.interface.js';
 import { Component, SortType } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { OfferEntity } from './offer.entity.js';
+import { UserEntity } from '../user/user.entity.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { Types } from 'mongoose';
+import { HttpError } from '../../libs/rest/index.js';
+import { StatusCodes } from 'http-status-codes';
 
 export const DEFAULT_OFFER_PREMIUM_COUNT = 3;
 export const DEFAULT_OFFER_COUNT = 60;
@@ -35,7 +38,8 @@ const addReviewsToOffer = [
 export class DefaultOfferService implements OfferService {
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
-    @inject(Component.OfferModel) private readonly offerModel: types.ModelType<OfferEntity>
+    @inject(Component.OfferModel) private readonly offerModel: types.ModelType<OfferEntity>,
+    @inject(Component.UserModel) private readonly userModel: types.ModelType<UserEntity>
   ) {}
 
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
@@ -94,12 +98,45 @@ export class DefaultOfferService implements OfferService {
       .exec();
   }
 
-  public async findFavorites(): Promise<DocumentType<OfferEntity>[]> {
-    return this.offerModel
-      .find({isFavorite: true})
-      .sort({createdAt: SortType.Down})
-      .populate(['hostId'])
+  public async findFavorites(hostId: string): Promise<DocumentType<OfferEntity>[]> {
+    const user = await this.userModel.findById(hostId);
+
+    return this.offerModel.aggregate([
+      {
+        $match: {
+          _id: {$in: user?.favoriteOffers}
+        },
+      },
+      {
+        $set: {
+          isFavorite: true,
+        },
+      },
+      {$sort: {createdAt: SortType.Down}},
+    ])
       .exec();
+  }
+
+  public async toggleFavorite(userId: string, offerId: string, isFavorite: boolean): Promise<boolean> {
+    const user = await this.userModel.findById(userId).exec();
+
+    if (!user) {
+      throw new HttpError(StatusCodes.NOT_FOUND, `User with id ${userId} not found.`, 'DefaultOfferService');
+    }
+
+    const offerObjectId = new Types.ObjectId(offerId);
+
+    if (!isFavorite) {
+      user.favoriteOffers.pull(offerObjectId);
+
+      await user.save();
+      return false;
+    } else {
+      user.favoriteOffers.push(offerObjectId);
+
+      await user.save();
+      return true;
+    }
   }
 
   public async incReviewCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
