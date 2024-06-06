@@ -6,7 +6,6 @@ import {
   IsArray, IsBoolean,
   IsDateString,
   IsInt,
-  IsMongoId,
   IsOptional,
   IsString,
   IsUrl,
