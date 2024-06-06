@@ -34,6 +34,25 @@ const addReviewsToOffer = [
   }
 ];
 
+const authorPipeline = [
+  {
+    $lookup: {
+      from: 'users',
+      localField: 'hostId',
+      foreignField: '_id',
+      as: 'users',
+    },
+  },
+  {
+    $addFields: {
+      author: { $arrayElemAt: ['$users', 0] },
+    },
+  },
+  {
+    $unset: ['users'],
+  },
+];
+
 @injectable()
 export class DefaultOfferService implements OfferService {
   constructor(
@@ -55,6 +74,7 @@ export class DefaultOfferService implements OfferService {
         $match: { _id: new Types.ObjectId(offerId) }
       },
       ...addReviewsToOffer,
+      ...authorPipeline,
     ])
       .exec();
 
@@ -65,6 +85,7 @@ export class DefaultOfferService implements OfferService {
   public async find(count = DEFAULT_OFFER_COUNT): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel.aggregate([
       ...addReviewsToOffer,
+      ...authorPipeline,
       { $sort: { createdAt: SortType.Down } },
       { $limit: count },
     ])
