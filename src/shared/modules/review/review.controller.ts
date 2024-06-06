@@ -5,7 +5,8 @@ import {
   RequestQuery,
   ValidateObjectIdMiddleware,
   ValidateDtoMiddleware,
-  DocumentExistsMiddleware
+  DocumentExistsMiddleware,
+  PrivateRouteMiddleware
 } from '../../libs/rest/index.js';
 import { inject, injectable } from 'inversify';
 import { Component } from '../../types/index.js';
@@ -19,6 +20,7 @@ import { fillDTO } from '../../helpers/index.js';
 import { ParamOfferId } from '../offer/param-offerid.type.js';
 import { CreateReviewRequest } from './index.js';
 import { CreateReviewDto } from './dto/create-review.dto.js';
+
 
 @injectable()
 export class ReviewController extends BaseController {
@@ -36,6 +38,7 @@ export class ReviewController extends BaseController {
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateDtoMiddleware(CreateReviewDto)
       ]
     });
