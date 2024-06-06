@@ -50,14 +50,14 @@ export class ReviewController extends BaseController {
     });
   }
 
-  public async findByOfferId({params, query}: Request<ParamOfferId, unknown, unknown, RequestQuery>, res: Response) {
+  public async findByOfferId({ params, query }: Request<ParamOfferId, unknown, unknown, RequestQuery>, res: Response) {
     const { offerId } = params;
     const { limit } = query;
     const reviews = await this.reviewService.findByOfferId(offerId, Number(limit) || undefined);
     this.ok(res, fillDTO(ReviewRdo, reviews));
   }
 
-  public async create({body}: CreateReviewRequest, res: Response) {
+  public async create({ body, tokenPayload }: CreateReviewRequest, res: Response) {
     if (! await this.offerService.exists(body.offerId)) {
       throw new HttpError(
         StatusCodes.NOT_FOUND,
@@ -66,7 +66,7 @@ export class ReviewController extends BaseController {
       );
     }
 
-    const review = await this.reviewService.create(body);
+    const review = await this.reviewService.create({ ...body, hostId: tokenPayload.id });
     this.created(res, fillDTO(ReviewRdo, review));
   }
 }
