@@ -4,6 +4,7 @@ import {
   ValidateDtoMiddleware,
   ValidateObjectIdMiddleware,
   DocumentExistsMiddleware,
+  PrivateRouteMiddleware,
 } from '../../libs/rest/index.js';
 import {Component} from '../../types/index.js';
 import {inject, injectable} from 'inversify';
@@ -44,6 +45,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateDtoMiddleware(CreateOfferDto),
       ]
     });
@@ -52,6 +54,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.Put,
       handler: this.update,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateDtoMiddleware(UpdateOfferDto),
         ...middlewares,
       ]
@@ -60,7 +63,10 @@ export class OfferController extends BaseController {
       path: '/:offerId',
       method: HttpMethod.Delete,
       handler: this.delete,
-      middlewares
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        ...middlewares,
+      ]
     });
     this.addRoute({
       path: '/:offerId',
