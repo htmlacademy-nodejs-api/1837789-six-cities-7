@@ -97,7 +97,7 @@ Content-Type: application/json
 ## Получить список избранных предложений для пользователя
 GET http://localhost:5000/offers/favorites HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJlbkBleGFtcGxlLmNvbSIsIm5hbWUiOiJCZW4iLCJpZCI6IjY2NTk3ZWY3ZTEyYzIzMmI3Yjc5ZjJlZCIsImlhdCI6MTcxNzY3NjAwMiwiZXhwIjoxNzE3ODQ4ODAyfQ.eSoRvVMa_g_ZHEMy5iPg3iETumoaeuQrgFB8oZrnNgQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJlbkBleGFtcGxlLmNvbSIsIm5hbWUiOiJiZW4iLCJpZCI6IjY2NjM0Yzc4ODBlYTVjZWViNzI3Njc0NCIsImlhdCI6MTcxNzc4MzY3NywiZXhwIjoxNzE3OTU2NDc3fQ.3J1aZjNNwsSTvH2wWGj5wA53cuA8NaxgTqSx_U9ECRQ
 
 ###
 
