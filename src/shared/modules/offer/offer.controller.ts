@@ -4,6 +4,8 @@ import {
   ValidateDtoMiddleware,
   ValidateObjectIdMiddleware,
   DocumentExistsMiddleware,
+  PrivateRouteMiddleware,
+  RequestBody
 } from '../../libs/rest/index.js';
 import {Component} from '../../types/index.js';
 import {inject, injectable} from 'inversify';
@@ -37,13 +39,14 @@ export class OfferController extends BaseController {
     this.addRoute({
       path: '/premium',
       method: HttpMethod.Get,
-      handler: this.showPremiumOffersbyCity
+      handler: this.showPremiumOffersByCity
     });
     this.addRoute({
       path: '/',
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateDtoMiddleware(CreateOfferDto),
       ]
     });
@@ -52,6 +55,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.Put,
       handler: this.update,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateDtoMiddleware(UpdateOfferDto),
         ...middlewares,
       ]
@@ -60,7 +64,10 @@ export class OfferController extends BaseController {
       path: '/:offerId',
       method: HttpMethod.Delete,
       handler: this.delete,
-      middlewares
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        ...middlewares,
+      ]
     });
     this.addRoute({
       path: '/:offerId',
@@ -74,19 +81,35 @@ export class OfferController extends BaseController {
       handler: this.getReviews,
       middlewares
     });
+    this.addRoute({
+      path: '/favorites',
+      method: HttpMethod.Get,
+      handler: this.showFavoritesOffers,
+      middlewares: [
+        new PrivateRouteMiddleware()
+      ]
+    });
+    this.addRoute({
+      path: '/:offerId/favorites',
+      method: HttpMethod.Put,
+      handler: this.updateFavorite,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        ...middlewares,
+      ],
+    });
   }
 
-  public async index({query}: Request, res: Response): Promise<void> {
-    const count = typeof query.count === 'string' ? parseInt(query.count, 10) : undefined;
-    const offers = await this.offerService.find(count);
+  public async index({tokenPayload}: Request<ParamOfferId>, res: Response): Promise<void> {
+    const offers = await this.offerService.find(tokenPayload?.id);
     this.ok(res, fillDTO(OfferRdo, offers));
   }
 
   public async create(
-    {body}: CreateOfferRequest,
+    {body, tokenPayload }: CreateOfferRequest,
     res: Response
   ): Promise<void> {
-    const result = await this.offerService.create(body);
+    const result = await this.offerService.create({ ...body, hostId: tokenPayload.id });
 
     this.created(res, fillDTO(OfferRdo, result));
   }
@@ -101,8 +124,8 @@ export class OfferController extends BaseController {
     this.ok(res, existsOffer);
   }
 
-  public async indexId({params}: Request<ParamOfferId>, res: Response): Promise<void> {
-    const existsOffer = await this.offerService.findById(params.offerId);
+  public async indexId({params, tokenPayload}: Request<ParamOfferId>, res: Response): Promise<void> {
+    const existsOffer = await this.offerService.findById(params.offerId, tokenPayload?.id);
     this.ok(res, fillDTO(OfferRdo, existsOffer));
   }
 
@@ -111,8 +134,28 @@ export class OfferController extends BaseController {
     this.ok(res, fillDTO(ReviewRdo, reviews));
   }
 
-  public async showPremiumOffersbyCity({ query }: Request, res: Response): Promise<void> {
+  public async showPremiumOffersByCity({ query }: Request, res: Response): Promise<void> {
     const offers = await this.offerService.findPremiumByCity(query.cityName as string);
     this.ok(res, fillDTO(OfferRdo, offers));
+  }
+
+  public async showFavoritesOffers({tokenPayload: { id }}: Request, res: Response): Promise<void> {
+    const offers = await this.offerService.findFavorites(id);
+    this.ok(res, fillDTO(OfferRdo, offers));
+  }
+
+  public async updateFavorite(
+    { params, tokenPayload, body }: Request<ParamOfferId, RequestBody, { isFavorite: string }>,
+    res: Response,
+  ): Promise<void> {
+    const { offerId } = params;
+    const isFavorite = body.isFavorite === 'true';
+    const hostId = tokenPayload.id;
+
+    const offer = await this.offerService.toggleFavorite(hostId, offerId, isFavorite);
+
+    this.ok(res, {
+      favorites: offer,
+    });
   }
 }

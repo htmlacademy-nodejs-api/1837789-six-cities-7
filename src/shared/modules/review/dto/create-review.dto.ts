@@ -17,6 +17,5 @@ export class CreateReviewDto {
   @Max(5, {message: CreateReviewMessages.rating.maxValue})
   public rating: number;
 
-  @IsMongoId({message: CreateReviewMessages.hostId.invalidFormat})
   public hostId: string;
 }

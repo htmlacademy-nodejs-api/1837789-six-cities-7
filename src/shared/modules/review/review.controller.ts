@@ -5,7 +5,8 @@ import {
   RequestQuery,
   ValidateObjectIdMiddleware,
   ValidateDtoMiddleware,
-  DocumentExistsMiddleware
+  DocumentExistsMiddleware,
+  PrivateRouteMiddleware
 } from '../../libs/rest/index.js';
 import { inject, injectable } from 'inversify';
 import { Component } from '../../types/index.js';
@@ -19,6 +20,7 @@ import { fillDTO } from '../../helpers/index.js';
 import { ParamOfferId } from '../offer/param-offerid.type.js';
 import { CreateReviewRequest } from './index.js';
 import { CreateReviewDto } from './dto/create-review.dto.js';
+
 
 @injectable()
 export class ReviewController extends BaseController {
@@ -36,6 +38,7 @@ export class ReviewController extends BaseController {
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateDtoMiddleware(CreateReviewDto)
       ]
     });
@@ -50,14 +53,14 @@ export class ReviewController extends BaseController {
     });
   }
 
-  public async findByOfferId({params, query}: Request<ParamOfferId, unknown, unknown, RequestQuery>, res: Response) {
+  public async findByOfferId({ params, query }: Request<ParamOfferId, unknown, unknown, RequestQuery>, res: Response) {
     const { offerId } = params;
     const { limit } = query;
     const reviews = await this.reviewService.findByOfferId(offerId, Number(limit) || undefined);
     this.ok(res, fillDTO(ReviewRdo, reviews));
   }
 
-  public async create({body}: CreateReviewRequest, res: Response) {
+  public async create({ body, tokenPayload }: CreateReviewRequest, res: Response) {
     if (! await this.offerService.exists(body.offerId)) {
       throw new HttpError(
         StatusCodes.NOT_FOUND,
@@ -66,7 +69,7 @@ export class ReviewController extends BaseController {
       );
     }
 
-    const review = await this.reviewService.create(body);
+    const review = await this.reviewService.create({ ...body, hostId: tokenPayload.id });
     this.created(res, fillDTO(ReviewRdo, review));
   }
 }

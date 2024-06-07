@@ -1,4 +1,5 @@
-import {Expose} from 'class-transformer';
+import {Expose, Type} from 'class-transformer';
+import {UserRdo} from '../user/user.rdo.js';
 
 export class OfferRdo {
 
@@ -45,7 +46,8 @@ export class OfferRdo {
   public location: string;
 
   @Expose()
-  public hostId: string;
+  @Type(() => UserRdo)
+  public author: UserRdo;
 
   @Expose()
   public rating: string;
