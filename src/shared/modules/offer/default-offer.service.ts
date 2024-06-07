@@ -83,9 +83,8 @@ export class DefaultOfferService implements OfferService {
 
   public async find(currentHostId?: string, count?: number,): Promise<DocumentType<OfferEntity>[]> {
     const limit = count || DEFAULT_OFFER_COUNT;
-    const isFavorite = !(currentHostId === undefined);
     return this.offerModel.aggregate([
-      {$set: {isFavorite: isFavorite}},
+      {$set: {isFavorite: {$in: [new Types.ObjectId(currentHostId), '$favorites']}}},
       ...addReviewsToOffer,
       ...authorPipeline,
       { $sort: { createdAt: SortType.Down } },

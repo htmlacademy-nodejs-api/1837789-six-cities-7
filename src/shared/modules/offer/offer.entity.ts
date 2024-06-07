@@ -61,7 +61,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true})
   public room: number;
 
-  @prop({type: Types.ObjectId, default: [],})
+  @prop({type: Types.ObjectId, required: true, default: []})
   public favorites: Types.Array<Types.ObjectId>;
 }
 
