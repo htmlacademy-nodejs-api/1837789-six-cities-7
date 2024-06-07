@@ -69,12 +69,11 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async findById(offerId: string, currentHostId?: string): Promise<DocumentType<OfferEntity> | null> {
-    const isFavorite = !(currentHostId === undefined);
     const result = await this.offerModel.aggregate([
       {
         $match: { _id: new Types.ObjectId(offerId) }
       },
-      {$set: {isFavorite: isFavorite}},
+      {$set: {isFavorite: {$in: [new Types.ObjectId(currentHostId), '$favorites']}}},
       ...addReviewsToOffer,
       ...authorPipeline,
     ])
@@ -145,22 +144,29 @@ export class DefaultOfferService implements OfferService {
 
   public async toggleFavorite(hostId: string, offerId: string, isFavorite: boolean): Promise<boolean> {
     const user = await this.userModel.findById(hostId).exec();
+    const offer = await this.offerModel.findById(offerId).exec();
 
     if (!user) {
       throw new HttpError(StatusCodes.NOT_FOUND, `User with id ${hostId} not found.`, 'DefaultOfferService');
     }
 
     const offerObjectId = new Types.ObjectId(offerId);
+    const userObjectId = new Types.ObjectId(hostId);
 
     if (!isFavorite) {
       user.favoriteOffers.pull(offerObjectId);
+      offer?.favorites.pull(userObjectId);
 
       await user.save();
+      await offer?.save();
       return false;
+
     } else {
       user.favoriteOffers.push(offerObjectId);
+      offer?.favorites.push(userObjectId);
 
       await user.save();
+      await offer?.save();
       return true;
     }
   }

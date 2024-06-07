@@ -8,6 +8,8 @@ import express, { Express } from 'express';
 import { Controller, ExceptionFilter } from '../shared/libs/rest/index.js';
 import { ParseTokenMiddleware } from '../shared/libs/rest/middleware/parse-token.middleware.js';
 
+import { OfferService } from '../shared/modules/offer/offer-service.interface.js';
+
 @injectable()
 export class RestApplication {
   private readonly server: Express;
@@ -21,6 +23,8 @@ export class RestApplication {
     @inject(Component.OfferController) private readonly offerController: Controller,
     @inject(Component.ReviewController) private readonly reviewController: Controller,
     @inject(Component.AuthExceptionFilter) private readonly authExceptionFilter: ExceptionFilter,
+
+    @inject(Component.OfferService) private readonly offerService: OfferService,
   ) {
     this.server = express();
   }
@@ -88,5 +92,8 @@ export class RestApplication {
     this.logger.info(
       `🚀 Server started on http://localhost:${this.config.get('PORT')}`
     );
+
+    const offer = await this.offerService.findFavorites('66597ef7e12c232b7b79f2ed');
+    console.info(offer);
   }
 }

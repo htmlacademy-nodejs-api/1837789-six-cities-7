@@ -8,7 +8,7 @@ import {
   HttpMethod,
   UploadFileMiddleware,
   ValidateDtoMiddleware,
-  ValidateObjectIdMiddleware,
+  ValidateObjectIdMiddleware
 } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
@@ -35,6 +35,12 @@ export class UserController extends BaseController {
     this.logger.info('Register routes for UserController…');
 
     this.addRoute({
+      path: '/:hostId',
+      method: HttpMethod.Get,
+      handler: this.indexId,
+      middlewares: [
+        new ValidateObjectIdMiddleware('hostId')]});
+    this.addRoute({
       path: '/register',
       method: HttpMethod.Post,
       handler: this.register,
@@ -59,6 +65,11 @@ export class UserController extends BaseController {
       method: HttpMethod.Get,
       handler: this.checkAuthenticate,
     });
+  }
+
+  public async indexId({params}: Request, res: Response): Promise<void> {
+    const existsOffer = await this.userService.findById(params.hostId);
+    this.ok(res, fillDTO(UserRdo, existsOffer));
   }
 
   public async register(

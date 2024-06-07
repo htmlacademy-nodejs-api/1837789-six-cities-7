@@ -145,11 +145,11 @@ export class OfferController extends BaseController {
   }
 
   public async updateFavorite(
-    { params, tokenPayload, body }: Request<ParamOfferId, RequestBody, { favorites: string }>,
+    { params, tokenPayload, body }: Request<ParamOfferId, RequestBody, { isFavorite: string }>,
     res: Response,
   ): Promise<void> {
     const { offerId } = params;
-    const isFavorite = body.favorites === 'true';
+    const isFavorite = body.isFavorite === 'true';
     const hostId = tokenPayload.id;
 
     const offer = await this.offerService.toggleFavorite(hostId, offerId, isFavorite);

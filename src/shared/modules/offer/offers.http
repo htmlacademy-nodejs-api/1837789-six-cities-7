@@ -11,7 +11,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJlbkBleGFtcGxlLmNvbSIsIm5hbWUiOiJCZW4iLCJpZCI6IjY2NTk3ZWY3ZTEyYzIzMmI3Yjc5ZjJlZCIsImlhdCI6MTcxNzY3NjAwMiwiZXhwIjoxNzE3ODQ4ODAyfQ.eSoRvVMa_g_ZHEMy5iPg3iETumoaeuQrgFB8oZrnNgQ
 
 {
-  "title": "Wood and stone place12345",
+  "title": "Wood and stone place123456",
   "description": "The building is green and from 18th century, but where the bustle of the city comes.",
   "publicDate": "2024-04-30T13:05:42.068Z",
   "city": {
@@ -51,7 +51,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJlbkBleGFtcGxlLmNvbSIsI
 
 ## Детальная информация по предложению.
 
-GET  http://localhost:5000/offers/66587fe58b1bc411de595c06/ HTTP/1.1
+GET  http://localhost:5000/offers/66587fe58b1bc411de595c0a/ HTTP/1.1
 Content-Type: application/json
 
 ###
@@ -76,9 +76,27 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJlbkBleGFtcGxlLmNvbSIsI
 
 ###
 
+## Изменить состояние флага isFavorite
+PUT http://localhost:5000/offers/66587fe58b1bc411de595c00/favorites/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJlbkBleGFtcGxlLmNvbSIsIm5hbWUiOiJCZW4iLCJpZCI6IjY2NTk3ZWY3ZTEyYzIzMmI3Yjc5ZjJlZCIsImlhdCI6MTcxNzY3NjAwMiwiZXhwIjoxNzE3ODQ4ODAyfQ.eSoRvVMa_g_ZHEMy5iPg3iETumoaeuQrgFB8oZrnNgQ
+
+{
+  "isFavorite": "true"
+}
+
+###
+
 ## Получить список премиальных предложений по городу
 GET http://localhost:5000/offers/premium/?cityName=Hamburg HTTP/1.1
 Content-Type: application/json
+
+###
+
+## Получить список избранных предложений для пользователя
+GET http://localhost:5000/offers/favorites HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJlbkBleGFtcGxlLmNvbSIsIm5hbWUiOiJCZW4iLCJpZCI6IjY2NTk3ZWY3ZTEyYzIzMmI3Yjc5ZjJlZCIsImlhdCI6MTcxNzY3NjAwMiwiZXhwIjoxNzE3ODQ4ODAyfQ.eSoRvVMa_g_ZHEMy5iPg3iETumoaeuQrgFB8oZrnNgQ
 
 ###
 
