@@ -30,9 +30,6 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   @prop({required: true, enum: UserType})
   public type: UserType;
 
-  @prop({type: Types.ObjectId, default: [],})
-  public favoriteOffers: Types.Array<Types.ObjectId>;
-
   constructor(userData: User) {
     super();
 
