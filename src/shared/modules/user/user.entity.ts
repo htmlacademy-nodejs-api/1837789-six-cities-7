@@ -20,7 +20,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   @prop({required: true, trim: true, unique: true})
   public email: string;
 
-  @prop({required: false, trim: true, default: 'https://15.design.htmlacademy.pro/static/avatar/7.jpg'})
+  @prop({required: false, trim: true})
   public avatarUrl: string;
 
   @prop({required: true, trim: true})
