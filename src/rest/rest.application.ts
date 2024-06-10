@@ -3,7 +3,7 @@ import { Config, RestSchema } from '../shared/libs/config/index.js';
 import { inject, injectable } from 'inversify';
 import { Component } from '../shared/types/index.js';
 import { DatabaseClient } from '../shared/libs/database-client/index.js';
-import { getMongoURI } from '../shared/helpers/index.js';
+import { getFullServerPath, getMongoURI } from '../shared/helpers/index.js';
 import express, { Express } from 'express';
 import { Controller, ExceptionFilter, ParseTokenMiddleware } from '../shared/libs/rest/index.js';
 
@@ -88,8 +88,6 @@ export class RestApplication {
 
     this.logger.info('Try to init server...');
     await this._initServer();
-    this.logger.info(
-      `🚀 Server started on http://localhost:${this.config.get('PORT')}`
-    );
+    this.logger.info(`🚀 Server started on ${getFullServerPath(this.config.get('HOST'), this.config.get('PORT'))}`);
   }
 }
