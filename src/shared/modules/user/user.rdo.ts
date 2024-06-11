@@ -5,7 +5,10 @@ export class UserRdo {
   public name: string;
 
   @Expose()
-  public email: string ;
+  public id: string;
+
+  @Expose()
+  public email: string;
 
   @Expose()
   public type: string;
