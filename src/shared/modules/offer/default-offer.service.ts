@@ -9,6 +9,7 @@ import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { Types } from 'mongoose';
 import { HttpError } from '../../libs/rest/index.js';
 import { StatusCodes } from 'http-status-codes';
+import { DEFAULT_PREVIEW_IMAGE_FILE_NAME } from './offer.constant.js';
 
 export const DEFAULT_OFFER_PREMIUM_COUNT = 3;
 export const DEFAULT_OFFER_COUNT = 60;
@@ -60,7 +61,7 @@ export class DefaultOfferService implements OfferService {
   ) {}
 
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
-    const result = await this.offerModel.create(dto);
+    const result = await this.offerModel.create({ ...dto, previewImage: DEFAULT_PREVIEW_IMAGE_FILE_NAME });
     this.logger.info(`New offer created: ${dto.title}`);
 
     return result;
