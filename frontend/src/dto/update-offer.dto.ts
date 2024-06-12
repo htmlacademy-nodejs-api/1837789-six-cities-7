@@ -21,5 +21,4 @@ export class UpdateOfferDTO {
   public description?: string;
   public goods?: string[];
   public host?: UserDTO;
-  public hostId?: number;
 }

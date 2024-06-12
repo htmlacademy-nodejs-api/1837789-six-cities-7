@@ -32,24 +32,24 @@ export const MAX_COMMENT_LENGTH = 300;
 
 export enum AppRoute {
   Root = '/',
-  Login = '/login',
-  Register = '/register',
-  Favorites = '/favorites',
-  Property = '/offer',
-  Add = '/add',
-  Edit = '/edit',
+  Login = '/users/login',
+  Register = '/users/register',
+  Favorites = '/offers/favorites',
+  Property = '/offers',
+  Add = '/offers',
+  Edit = '/offers',
   NotFound = '/404',
 }
 
 export enum ApiRoute {
   Offers = '/offers',
-  Login = '/login',
+  Login = '/users/register',
   Logout = '/logout',
-  Register = '/register',
-  Avatar = '/avatar',
-  Comments = '/comments',
-  Favorite = '/favorites',
-  Premium = '/premium',
+  Register = '/users/register',
+  Avatar = '/users/:hostId/avatar',
+  Comments = '/reviews',
+  Favorite = '/offers/favorites',
+  Premium = '/offers/premium',
 }
 
 export enum AuthorizationStatus {
@@ -79,6 +79,11 @@ export enum StoreSlice {
 export enum HttpCode {
   NotFound = 404,
   NoAuth = 401,
+  OK = 200,
+  CREATED = 201,
+  BAD_REQUEST = 400,
+  NOT_FOUND = 404,
+  CONFLICT = 409,
 }
 
 export enum SubmitStatus {

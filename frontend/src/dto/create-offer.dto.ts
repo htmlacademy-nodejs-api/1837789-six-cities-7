@@ -11,7 +11,6 @@ export class CreateOfferDTO {
   public type!: OfferTypeDTO;
   public room?: number;
   public bedroom!: number;
-  public hostId!: number;
   public price!: number;
   public goods!: string[];
   public location!: LocationDTO;
