@@ -37,10 +37,10 @@ export class OfferEntity extends defaultClasses.TimeStamps {
 
   public host: User;
 
-  @prop({required: true, type: [String]})
+  @prop({required: false, type: [String]})
   public images: string[];
 
-  @prop({required: true})
+  @prop({required: false})
   public isFavorite: boolean;
 
   @prop({required: true})
@@ -49,13 +49,13 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true})
   public location: Location;
 
-  @prop({required: true})
+  @prop({required: false})
   public previewImage: string;
 
   @prop({required: true})
   public price: number;
 
-  @prop({required: true})
+  @prop({required: false})
   public publicDate: Date;
 
   @prop({required: true})

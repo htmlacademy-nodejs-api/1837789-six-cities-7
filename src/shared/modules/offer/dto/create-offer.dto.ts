@@ -1,14 +1,11 @@
 import { OfferType, City, Location, CityValidation, LocationValidation } from '../../../types/index.js';
 import { Type } from 'class-transformer';
 import {
-  ArrayMaxSize,
-  ArrayMinSize,
   IsArray, IsBoolean,
   IsDateString,
   IsInt,
   IsOptional,
   IsString,
-  IsUrl,
   Max,
   MaxLength,
   Min,
@@ -39,18 +36,8 @@ export class CreateOfferDto {
   @Type(() => CityValidation)
   public city: City;
 
-  @IsArray({ message: CreateOfferValidationMessage.images.invalidFormat })
-  @IsString({each: true, message: CreateOfferValidationMessage.images.isString})
-  @ArrayMinSize(6, { message: CreateOfferValidationMessage.images.ArrayMinSize })
-  @ArrayMaxSize(6, { message: CreateOfferValidationMessage.images.ArrayMaxSize })
-  @IsUrl({}, {each: true, message: CreateOfferValidationMessage.images.isUrl })
-  public images: string[];
-
   @IsBoolean({ message: CreateOfferValidationMessage.isPremium.invalidFormat })
   public isPremium: boolean;
-
-  @IsBoolean({ message: CreateOfferValidationMessage.isFavorite.invalidFormat })
-  public isFavorite: boolean;
 
   @IsEnum(OfferTypeEnum, {message: CreateOfferValidationMessage.type.invalidFormat})
   public type: OfferType;
