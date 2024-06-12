@@ -28,17 +28,12 @@ export class ParseTokenMiddleware implements Middleware {
 
     const [, token] = authorizationHeader;
 
-    try {
-      const { payload } = await jwtVerify(token, createSecretKey(this.jwtSecret, 'utf-8'));
+    const { payload } = await jwtVerify(token, createSecretKey(this.jwtSecret, 'utf-8'));
 
-      if (isTokenPayload(payload)) {
-        req.tokenPayload = { ...payload };
-        return next();
-      } else {
-        throw new Error('Bad token');
-      }
-    } catch {
-
+    if (isTokenPayload(payload)) {
+      req.tokenPayload = { ...payload };
+      return next();
+    } else {
       return next(new HttpError(
         StatusCodes.UNAUTHORIZED,
         'Invalid token',

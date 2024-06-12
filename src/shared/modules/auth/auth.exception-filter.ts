@@ -11,7 +11,7 @@ export class AuthExceptionFilter implements ExceptionFilter {
   constructor(
     @inject(Component.Logger) private readonly logger: Logger
   ) {
-    this.logger.info('Register AuthExceptionFilter');
+    this.logger.info(`Register ${AuthExceptionFilter.name}`);
   }
 
   public catch(error: unknown, _req: Request, res: Response, next: NextFunction): void {

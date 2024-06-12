@@ -9,7 +9,6 @@ import {
   IsOptional,
   IsString,
   IsUrl,
-  Matches,
   Max,
   MaxLength,
   Min,
@@ -39,11 +38,6 @@ export class CreateOfferDto {
   @ValidateNested()
   @Type(() => CityValidation)
   public city: City;
-
-  @IsUrl({}, { message: CreateOfferValidationMessage.previewImage.isUrl })
-  @IsString({ message: CreateOfferValidationMessage.previewImage.isString})
-  @Matches(/\.(jpg|png)(\?.*)?$/i, { message: CreateOfferValidationMessage.previewImage.matches })
-  public previewImage: string;
 
   @IsArray({ message: CreateOfferValidationMessage.images.invalidFormat })
   @IsString({each: true, message: CreateOfferValidationMessage.images.isString})
