@@ -15,7 +15,4 @@ export class ReviewRdo {
 
   @Expose()
   public hostId: string;
-
-  @Expose()
-  public publishDate: Date;
 }
