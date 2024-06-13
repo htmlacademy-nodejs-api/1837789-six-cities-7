@@ -69,7 +69,7 @@ export class ReviewController extends BaseController {
       );
     }
 
-    const review = await this.reviewService.create({ offerId: offerId, ...body, hostId: tokenPayload.id});
+    const review = await this.reviewService.create({ offerId, ...body, hostId: tokenPayload.id});
     this.created(res, fillDTO(ReviewRdo, review));
   }
 }

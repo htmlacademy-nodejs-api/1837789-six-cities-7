@@ -36,6 +36,9 @@ export class CreateOfferDto {
   @Type(() => CityValidation)
   public city: City;
 
+  @IsOptional()
+  public previewImage: string;
+
   @IsBoolean({ message: CreateOfferValidationMessage.isPremium.invalidFormat })
   public isPremium: boolean;
 

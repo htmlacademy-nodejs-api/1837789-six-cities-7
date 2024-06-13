@@ -36,8 +36,8 @@ export enum AppRoute {
   Register = '/users/register',
   Favorites = '/offers/favorites',
   Property = '/offers',
-  Add = '/offers',
-  Edit = '/offers',
+  Add = '/add',
+  Edit = '/edit',
   NotFound = '/404',
 }
 

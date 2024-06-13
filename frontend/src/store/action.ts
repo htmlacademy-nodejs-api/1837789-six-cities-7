@@ -93,7 +93,7 @@ export const editOffer = createAsyncThunk<Offer, Offer, { extra: Extra }>(
     const {api, history} = extra;
     const adaptedOffer = adaptOfferToServer(offer);
 
-    const {data} = await api.patch<OfferDTO>(`${ApiRoute.Offers}/${offer.id}`, adaptedOffer);
+    const {data} = await api.put<OfferDTO>(`${ApiRoute.Offers}/${offer.id}`, adaptedOffer);
     history.push(`${AppRoute.Property}/${data.id}`);
 
     return adaptOfferToClient(data);
@@ -147,7 +147,7 @@ export const logoutUser = createAsyncThunk<void, undefined, { extra: Extra }>(
 
 export const registerUser = createAsyncThunk<void, UserRegister, { extra: Extra }>(
   Action.REGISTER_USER,
-  async ({email, password, name, avatar, type}, {extra}) => {
+  async ({email, password, name, type}, {extra}) => {
     const {api, history} = extra;
     const userData: UserRegister = {name, email, password, type};
 

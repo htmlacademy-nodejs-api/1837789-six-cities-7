@@ -26,7 +26,7 @@ const addReviewsToOffer = [
   {
     $addFields: {
       reviewCount: {$size: '$reviews'},
-      rating: {$avg: '$reviews.rating'},
+      rating: { $trunc : [ {$avg: '$reviews.rating'}, 1 ] },
     }
   },
   {
