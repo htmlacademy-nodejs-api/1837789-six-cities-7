@@ -166,9 +166,9 @@ export const fetchComments = createAsyncThunk<Comment[], Offer['id'], { extra: E
 
 export const postComment = createAsyncThunk<Comment, CommentAuth, { extra: Extra }>(
   Action.POST_COMMENT,
-  async ({comment, rating}, {extra}) => {
+  async ({id, comment, rating}, {extra}) => {
     const {api} = extra;
-    const {data} = await api.post<ReviewDTO>(`${ApiRoute.Comments}`, {comment, rating});
+    const {data} = await api.post<ReviewDTO>(`${ApiRoute.Comments}/${id}`, {comment, rating});
 
     return adaptCommentToClient(data);
   });
