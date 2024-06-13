@@ -18,7 +18,6 @@ const CardList = (): JSX.Element => {
   const activeCity = useAppSelector(getCity);
   const isOffersLoading = useAppSelector(getIsOffersLoading);
   const offers = useAppSelector(selectOffers);
-  console.log(offers);
   const [activeOffer, setActiveOffer] = useState<string | null>(null);
 
   const isEmpty = offers.length === 0;
