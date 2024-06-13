@@ -178,7 +178,6 @@ export const fetchFavoriteOffers = createAsyncThunk<Offer[], undefined, { extra:
   async (_, {extra}) => {
     const {api} = extra;
     const {data} = await api.get<OfferDTO[]>(ApiRoute.Favorite);
-
     return adaptOffersShortToClient(data);
   });
 

@@ -13,7 +13,6 @@ type BookmarkProps = {
 const Bookmark = ({ id, isActive, place = 'place-card' }: BookmarkProps) => {
   const dispatch = useAppDispatch();
   const isAuthorized = useAppSelector(getIsAuthorized);
-
   const handleButtonClick = () => {
     if (isActive) {
       dispatch(deleteFavorite(id));

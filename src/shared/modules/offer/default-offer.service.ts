@@ -125,6 +125,7 @@ export class DefaultOfferService implements OfferService {
 
   public async findFavorites(hostId: string): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel.aggregate([
+      {$addFields: {id: {$toString: '$_id'}}},
       {$match: {$expr: {$in: [new Types.ObjectId(hostId), '$favorites']}}},
       {$set: {isFavorite: {$in: [new Types.ObjectId(hostId), '$favorites']}}},
       {$sort: {createdAt: SortType.Down}},

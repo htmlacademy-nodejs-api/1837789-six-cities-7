@@ -55,6 +55,14 @@ export class OfferController extends BaseController {
       ]
     });
     this.addRoute({
+      path: '/favorites',
+      method: HttpMethod.Get,
+      handler: this.showFavoritesOffers,
+      middlewares: [
+        new PrivateRouteMiddleware()
+      ]
+    });
+    this.addRoute({
       path: '/:offerId',
       method: HttpMethod.Put,
       handler: this.update,
@@ -84,14 +92,6 @@ export class OfferController extends BaseController {
       method: HttpMethod.Get,
       handler: this.getReviews,
       middlewares
-    });
-    this.addRoute({
-      path: '/favorites',
-      method: HttpMethod.Get,
-      handler: this.showFavoritesOffers,
-      middlewares: [
-        new PrivateRouteMiddleware()
-      ]
     });
     this.addRoute({
       path: '/favorites/:offerId',
