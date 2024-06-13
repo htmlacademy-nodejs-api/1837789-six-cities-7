@@ -2,6 +2,8 @@ import {Expose, Type} from 'class-transformer';
 import {UserRdo} from '../user/user.rdo.js';
 
 export class OfferRdo {
+  @Expose()
+  public id: string;
 
   @Expose()
   public title: string;

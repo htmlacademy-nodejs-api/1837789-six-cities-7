@@ -63,7 +63,7 @@ export const fetchOffers = createAsyncThunk<Offer[], undefined, { extra: Extra }
   Action.FETCH_OFFERS,
   async (_, {extra}) => {
     const {api} = extra;
-    const {data} = await api.get<OfferShortDTO[]>(ApiRoute.Offers);
+    const {data} = await api.get<OfferDTO[]>(ApiRoute.Offers);
     return adaptOffersShortToClient(data);
   });
 
