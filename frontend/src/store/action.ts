@@ -43,10 +43,10 @@ export const fetchOffer = createAsyncThunk<Offer, Offer['id'], { extra: Extra }>
   Action.FETCH_OFFER,
   async (id, {extra}) => {
     const {api, history} = extra;
-
     try {
       const {data} = await api.get<OfferDTO>(`${ApiRoute.Offers}/${id}`);
-      return adaptOfferToClient(data);
+      const result = adaptOfferToClient(data);
+      return result;
 
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -166,9 +166,9 @@ export const fetchComments = createAsyncThunk<Comment[], Offer['id'], { extra: E
 
 export const postComment = createAsyncThunk<Comment, CommentAuth, { extra: Extra }>(
   Action.POST_COMMENT,
-  async ({id, comment, rating}, {extra}) => {
+  async ({comment, rating}, {extra}) => {
     const {api} = extra;
-    const {data} = await api.post<ReviewDTO>(`${ApiRoute.Comments}/${id}`, {comment, rating});
+    const {data} = await api.post<ReviewDTO>(`${ApiRoute.Comments}`, {comment, rating});
 
     return adaptCommentToClient(data);
   });

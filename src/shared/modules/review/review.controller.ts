@@ -18,7 +18,6 @@ import { StatusCodes } from 'http-status-codes';
 import { ReviewRdo } from './review.rdo.js';
 import { fillDTO } from '../../helpers/index.js';
 import { ParamOfferId } from '../offer/param-offerid.type.js';
-import { CreateReviewRequest } from './index.js';
 import { CreateReviewDto } from './dto/create-review.dto.js';
 
 
@@ -34,7 +33,7 @@ export class ReviewController extends BaseController {
     this.logger.info('Register routes for ReviewsController...');
 
     this.addRoute({
-      path: '/',
+      path: '/:offerId',
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
@@ -60,16 +59,17 @@ export class ReviewController extends BaseController {
     this.ok(res, fillDTO(ReviewRdo, reviews));
   }
 
-  public async create({ body, tokenPayload }: CreateReviewRequest, res: Response) {
-    if (! await this.offerService.exists(body.offerId)) {
+  public async create({ params, body, tokenPayload }:Request, res: Response) {
+    const { offerId } = params;
+    if (! await this.offerService.exists(offerId)) {
       throw new HttpError(
         StatusCodes.NOT_FOUND,
-        `Offer with id ${body.offerId} not found.`,
+        `Offer with id ${offerId} not found.`,
         'ReviewsController'
       );
     }
 
-    const review = await this.reviewService.create({ ...body, hostId: tokenPayload.id });
+    const review = await this.reviewService.create({ offerId: offerId, ...body, hostId: tokenPayload.id});
     this.created(res, fillDTO(ReviewRdo, review));
   }
 }

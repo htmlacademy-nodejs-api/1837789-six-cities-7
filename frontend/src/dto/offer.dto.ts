@@ -20,5 +20,5 @@ export class OfferDTO {
   public images!: string[];
   public rating!: number;
   public isFavorite!: boolean;
-  public host!: UserDTO;
+  public author!: UserDTO;
 }

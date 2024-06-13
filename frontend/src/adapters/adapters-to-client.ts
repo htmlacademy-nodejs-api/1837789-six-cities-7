@@ -59,7 +59,7 @@ export function adaptOfferToClient(offerDTO: OfferDTO): Offer {
     type: offerDTO.type,
     location: adaptLocationToClient(offerDTO.location),
     city: adaptCityToClient(offerDTO.city),
-    host: adaptUserToClient(offerDTO.host)
+    host: adaptUserToClient(offerDTO.author)
   };
 }
 
