@@ -47,7 +47,7 @@ export enum ApiRoute {
   Logout = '/logout',
   Register = '/users/register',
   Avatar = '/users/:hostId/avatar',
-  Comments = '/reviews',
+  Comments = '/offers/:offerId/reviews',
   Favorite = '/offers/favorites',
   Premium = '/offers/premium',
 }

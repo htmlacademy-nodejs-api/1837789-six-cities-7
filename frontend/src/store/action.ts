@@ -10,7 +10,6 @@ import {
 } from '../adapters/adapters-to-client';
 import {adaptNewOfferToServer, adaptOfferToServer} from '../adapters/adapters-to-server';
 import {ApiRoute, AppRoute, HttpCode} from '../const';
-import {OfferShortDTO} from '../dto/offer-short.dto';
 import {OfferDTO} from '../dto/offer.dto';
 import {ReviewDTO} from '../dto/review.dto';
 import {UserDTO} from '../dto/user.dto';
@@ -161,7 +160,7 @@ export const fetchComments = createAsyncThunk<Comment[], Offer['id'], { extra: E
   Action.FETCH_COMMENTS,
   async (id, {extra}) => {
     const {api} = extra;
-    const {data} = await api.get<ReviewDTO[]>(`${ApiRoute.Comments}/${id}`);
+    const {data} = await api.get<ReviewDTO[]>(`/offers/${id}/reviews`);
     return adaptCommentsToClient(data);
   });
 
@@ -178,7 +177,7 @@ export const fetchFavoriteOffers = createAsyncThunk<Offer[], undefined, { extra:
   Action.FETCH_FAVORITE_OFFERS,
   async (_, {extra}) => {
     const {api} = extra;
-    const {data} = await api.get<OfferShortDTO[]>(ApiRoute.Favorite);
+    const {data} = await api.get<OfferDTO[]>(ApiRoute.Favorite);
 
     return adaptOffersShortToClient(data);
   });
