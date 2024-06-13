@@ -94,9 +94,18 @@ export class OfferController extends BaseController {
       ]
     });
     this.addRoute({
-      path: '/:offerId/favorites',
-      method: HttpMethod.Put,
-      handler: this.updateFavorite,
+      path: '/favorites/:offerId',
+      method: HttpMethod.Post,
+      handler: this.postFavorite,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        ...middlewares,
+      ],
+    });
+    this.addRoute({
+      path: '/favorites/:offerId',
+      method: HttpMethod.Delete,
+      handler: this.deleteFavorite,
       middlewares: [
         new PrivateRouteMiddleware(),
         ...middlewares,
@@ -158,12 +167,27 @@ export class OfferController extends BaseController {
     this.ok(res, fillDTO(OfferRdo, offers));
   }
 
-  public async updateFavorite(
-    { params, tokenPayload, body }: Request<ParamOfferId, RequestBody, { isFavorite: string }>,
+  public async deleteFavorite(
+    { params, tokenPayload}: Request<ParamOfferId, RequestBody, { isFavorite: string }>,
     res: Response,
   ): Promise<void> {
     const { offerId } = params;
-    const isFavorite = body.isFavorite === 'true';
+    const isFavorite = false;
+    const hostId = tokenPayload.id;
+
+    const offer = await this.offerService.toggleFavorite(hostId, offerId, isFavorite);
+
+    this.ok(res, {
+      favorites: offer,
+    });
+  }
+
+  public async postFavorite(
+    { params, tokenPayload}: Request<ParamOfferId, RequestBody, { isFavorite: string }>,
+    res: Response,
+  ): Promise<void> {
+    const { offerId } = params;
+    const isFavorite = true;
     const hostId = tokenPayload.id;
 
     const offer = await this.offerService.toggleFavorite(hostId, offerId, isFavorite);

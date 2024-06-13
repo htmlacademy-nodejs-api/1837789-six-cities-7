@@ -191,7 +191,7 @@ export const postFavorite = createAsyncThunk<
 
   try {
     const {data} = await api.post(
-      `${AppRoute.Favorites}/${id}`
+      `${AppRoute.Favorites}/${id}`,
     );
 
     return data;

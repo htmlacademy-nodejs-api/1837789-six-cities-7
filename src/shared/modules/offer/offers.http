@@ -53,6 +53,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImRpa0BleGFtcGxlLmNvbSIsI
 
 GET  http://localhost:5000/offers/666a7a6f88c4cae625709af5/ HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFsaW5hdmRvdmljaGVua28ucnVAZ21haWwuY29tIiwibmFtZSI6ImFsaW5hdmRvdmljaGVuayIsImlkIjoiNjY2YTg5Mzg2NWViYmQwOWUwMjYwZjM2IiwiaWF0IjoxNzE4MjU4MTA2LCJleHAiOjE3MTg0MzA5MDZ9.u0smTfFxo-jB6MabTaTKry-l69H0wkYkQ8bQZ9gSSaU
 ###
 
 ## Удалить предложение.
@@ -75,14 +76,18 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJlbkBleGFtcGxlLmNvbSIsI
 
 ###
 
-## Изменить состояние флага isFavorite
-PUT http://localhost:5000/offers/666a7a6f88c4cae625709b00/favorites/ HTTP/1.1
+## Изменить состояние флага isFavorite на true
+POST http://localhost:5000/offers/favorites/666a7a6f88c4cae625709af5/ HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFsaW5hdmRvdmljaGVua28ucnVAZ21haWwuY29tIiwibmFtZSI6ImFsaW5hdmRvdmljaGVuayIsImlkIjoiNjY2YTg5Mzg2NWViYmQwOWUwMjYwZjM2IiwiaWF0IjoxNzE4MjU4MTA2LCJleHAiOjE3MTg0MzA5MDZ9.u0smTfFxo-jB6MabTaTKry-l69H0wkYkQ8bQZ9gSSaU
 
-{
-  "isFavorite": "true"
-}
+
+###
+
+## Изменить состояние флага isFavorite на false
+DELETE http://localhost:5000/offers/favorites/666a7a6f88c4cae625709af5/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFsaW5hdmRvdmljaGVua28ucnVAZ21haWwuY29tIiwibmFtZSI6ImFsaW5hdmRvdmljaGVuayIsImlkIjoiNjY2YTg5Mzg2NWViYmQwOWUwMjYwZjM2IiwiaWF0IjoxNzE4MjU4MTA2LCJleHAiOjE3MTg0MzA5MDZ9.u0smTfFxo-jB6MabTaTKry-l69H0wkYkQ8bQZ9gSSaU
 
 ###
 
