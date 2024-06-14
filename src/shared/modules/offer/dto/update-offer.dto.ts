@@ -2,16 +2,12 @@ import { OfferType, City, Location, CityValidation, LocationValidation } from '.
 import { CreateUpdateOfferMessage } from './update-offer.messages.js';
 import { Type } from 'class-transformer';
 import {
-  ArrayMaxSize,
-  ArrayMinSize,
   IsArray, IsBoolean,
   IsDateString,
   IsEnum,
   IsInt,
-  IsMongoId,
   IsOptional,
   IsUrl,
-  Matches,
   Max,
   MaxLength,
   Min,
@@ -45,16 +41,11 @@ export class UpdateOfferDto {
   public city?: City;
 
   @IsOptional()
-  @IsUrl({}, { message: CreateUpdateOfferMessage.previewImage.isUrl })
-  @IsString({ message: CreateUpdateOfferMessage.previewImage.isString})
-  @Matches(/\.(jpg|png)(\?.*)?$/i, {message: CreateUpdateOfferMessage.previewImage.matches})
   public previewImage?: string;
 
   @IsOptional()
   @IsArray({ message: CreateUpdateOfferMessage.images.invalidFormat })
   @IsString({each: true, message: CreateUpdateOfferMessage.images.isString})
-  @ArrayMinSize(6, { message: CreateUpdateOfferMessage.images.ArrayMinSize })
-  @ArrayMaxSize(6, { message: CreateUpdateOfferMessage.images.ArrayMaxSize })
   @IsUrl({}, {each: true, message: CreateUpdateOfferMessage.images.isUrl })
   public images?: string[];
 
@@ -92,11 +83,6 @@ export class UpdateOfferDto {
   @IsArray({ message: CreateUpdateOfferMessage.goods.invalidFormat })
   @IsEnum(GoodsEnum, {each: true, message: CreateUpdateOfferMessage.goods.isEnum})
   public goods?: string[];
-
-  @IsOptional()
-  @IsMongoId({ message: CreateUpdateOfferMessage.hostId.invalidId })
-  @IsString({ message: CreateUpdateOfferMessage.hostId.isString})
-  public hostId?: string;
 
   @IsOptional()
   @ValidateNested()

@@ -19,7 +19,7 @@ POST http://localhost:5000/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "alinavdovichenko.ru@gmail.com",
+  "email": "alina@example.com",
   "password": "1234567"
 }
 
@@ -44,7 +44,7 @@ Content-Type: image/png
 ## Проверить токен пользователя
 GET http://localhost:5000/users/login HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJlbkBleGFtcGxlLmNvbSIsIm5hbWUiOiJiZW4iLCJpZCI6IjY2NjM0Yzc4ODBlYTVjZWViNzI3Njc0NCIsImlhdCI6MTcxNzc4MzY3NywiZXhwIjoxNzE3OTU2NDc3fQ.3J1aZjNNwsSTvH2wWGj5wA53cuA8NaxgTqSx_U9ECRQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFsaW5hQGV4YW1wbGUuY29tIiwibmFtZSI6ImFsaW5hIiwiaWQiOiI2NjZjMjZmODc5MWM1OWI2MWU4MzgxZTAiLCJpYXQiOjE3MTgzNjM5MTcsImV4cCI6MTcxODUzNjcxN30.JWgbvtG2E7f11aGmAK2ApbITrwQeuUyZTh8W8O4fYgA
 
 ###
 

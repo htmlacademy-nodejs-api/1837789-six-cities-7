@@ -70,7 +70,13 @@ export class DefaultOfferService implements OfferService {
 
   public async findById(offerId: string, currentHostId?: string): Promise<DocumentType<OfferEntity> | null> {
     const result = await this.offerModel.aggregate([
-      {$addFields: {id: offerId}},
+      {
+        $addFields:
+        {
+          id: offerId,
+          publicDate: {$toString: '$createdAt'},
+        }
+      },
       {
         $match: { _id: new Types.ObjectId(offerId) }
       },
@@ -87,7 +93,12 @@ export class DefaultOfferService implements OfferService {
   public async find(currentHostId?: string, count?: number,): Promise<DocumentType<OfferEntity>[]> {
     const limit = count || DEFAULT_OFFER_COUNT;
     return this.offerModel.aggregate([
-      {$addFields: {id: {$toString: '$_id'}}},
+      {$addFields:
+        {
+          id: {$toString: '$_id'},
+          publicDate: {$toString: '$createdAt'},
+        }
+      },
       {$set: {isFavorite: {$in: [new Types.ObjectId(currentHostId), '$favorites']}}},
       ...addReviewsToOffer,
       ...authorPipeline,

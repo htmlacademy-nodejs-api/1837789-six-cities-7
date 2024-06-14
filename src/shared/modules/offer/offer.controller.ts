@@ -18,7 +18,6 @@ import {OfferService} from './offer-service.interface.js';
 import {UserService} from '../user/index.js';
 import {fillDTO} from '../../helpers/index.js';
 import {OfferRdo} from './offer.rdo.js';
-import {UpdateOfferRequest} from './update-offer-request.type.js';
 import {CreateOfferRequest} from './create-offer-requset.type.js';
 import { ParamOfferId } from './param-offerid.type.js';
 import { ReviewRdo, ReviewService } from '../review/index.js';
@@ -141,9 +140,18 @@ export class OfferController extends BaseController {
     this.created(res, fillDTO(OfferRdo, result));
   }
 
-  public async update({body, params}: UpdateOfferRequest, res: Response): Promise<void> {
-    const updatedOffer = await this.offerService.updateById(String(params.offerId), body);
-    this.ok(res, fillDTO(OfferRdo, updatedOffer));
+  public async update({body, params, tokenPayload }: Request, res: Response): Promise<void> {
+    const offer = await this.offerService.findById(params.offerId);
+    const author = await this.userService.findById(String(offer?.hostId));
+    if (author?.email === tokenPayload.email) {
+      const updatedOffer = await this.offerService.updateById(String(params.offerId), body);
+      this.ok(res, fillDTO(OfferRdo, updatedOffer));
+    } else {
+      throw new HttpError(
+        StatusCodes.BAD_REQUEST,
+        `${tokenPayload.email} didn't create this offer`,
+      );
+    }
   }
 
   public async delete({ params, tokenPayload }: Request, res: Response): Promise<void> {

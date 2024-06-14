@@ -47,7 +47,7 @@ export function adaptNewOfferToServer(offerData: NewOffer): CreateOfferDTO {
     title: offerData.title,
     description: offerData.description,
     city: adaptCityToServer(offerData.city),
-    previewImage: '',
+    previewImage: offerData.previewImage,
     isPremium: offerData.isPremium,
     type: offerData.type as OfferTypeDTO,
     room: offerData.bedrooms,
@@ -55,7 +55,7 @@ export function adaptNewOfferToServer(offerData: NewOffer): CreateOfferDTO {
     price: offerData.price,
     goods: offerData.goods,
     location: adaptLocationToServer(offerData.location),
-    images: []
+    images: offerData.images
   };
 }
 

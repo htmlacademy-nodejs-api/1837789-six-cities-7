@@ -30,7 +30,7 @@ export class TSVOfferGenerator implements OfferGenerator {
     const hostAvatar = getRandomItem(this.mockData.hostAvatarUrls);
     const hostPassword = getRandomItem(this.mockData.hostPasswords);
     const hostType = getRandomItem(this.mockData.hostTypes);
-    const location = getRandomItem(this.mockData.locations);
+    const location = city.location;
 
     return [
       title, description, publicDate, city.name, city.location.latitude, city.location.longitude,
