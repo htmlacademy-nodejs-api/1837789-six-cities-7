@@ -66,7 +66,10 @@
       "previewImage4.jpg",
       "previewImage5.jpg",
       "previewImage6.jpg",
-      "previewImage7.jpg"
+      "previewImage7.jpg",
+      "previewImage8.jpg",
+      "previewImage9.jpg",
+      "previewImage10.jpg"
     ],
     "images": [
       "image1.jpg",
@@ -75,7 +78,12 @@
       "image4.jpg",
       "image5.jpg",
       "image6.jpg",
-      "image7.jpg"
+      "image7.jpg",
+      "image8.jpg",
+      "image9.jpg",
+      "image10.jpg",
+      "image11.jpg",
+      "image12.jpg"
     ],
     "isPremium": [
       true,

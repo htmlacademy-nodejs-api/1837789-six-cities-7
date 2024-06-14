@@ -13,6 +13,7 @@ import {
   ValidateNested,
   IsEnum,
   IsNumber,
+  IsUrl
 } from 'class-validator';
 import { CreateOfferValidationMessage } from './create-offer.messages.js';
 import { GoodsEnum, OfferTypeEnum } from '../../../../consts.js';
@@ -35,6 +36,11 @@ export class CreateOfferDto {
   @ValidateNested()
   @Type(() => CityValidation)
   public city: City;
+
+  @IsArray({ message: CreateOfferValidationMessage.images.invalidFormat })
+  @IsString({each: true, message: CreateOfferValidationMessage.images.isString})
+  @IsUrl({}, {each: true, message: CreateOfferValidationMessage.images.isUrl })
+  public images: string[];
 
   @IsBoolean({ message: CreateOfferValidationMessage.isPremium.invalidFormat })
   public isPremium: boolean;
