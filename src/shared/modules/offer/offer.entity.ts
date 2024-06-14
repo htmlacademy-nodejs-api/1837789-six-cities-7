@@ -35,7 +35,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true, ref: UserEntity})
   public hostId: Ref<UserEntity>;
 
-  public host: User;
+  public autor: User;
 
   @prop({required: false, type: [String]})
   public images: string[];

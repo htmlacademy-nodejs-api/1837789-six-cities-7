@@ -93,7 +93,7 @@ export function adaptCommentToClient(reviewDTO: ReviewDTO): Comment {
   return {
     id: reviewDTO.id,
     comment: reviewDTO.comment,
-    date: reviewDTO.publishDate.toString(),
+    date: reviewDTO.date,
     rating: reviewDTO.rating,
     user: adaptUserToClient(reviewDTO.author)
   };

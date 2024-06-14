@@ -1,5 +1,5 @@
 import { CreateReviewMessages } from './create-review.messages.js';
-import { IsInt, IsString, Length, Max, Min } from 'class-validator';
+import { IsInt, IsString, Length, Max, Min,IsOptional } from 'class-validator';
 
 export class CreateReviewDto {
   public offerId: string;
@@ -8,6 +8,7 @@ export class CreateReviewDto {
   @Length(5, 1024, {message: CreateReviewMessages.comment.lengthField})
   public comment: string;
 
+  @IsOptional()
   public publishDate: Date;
 
   @IsInt({message: CreateReviewMessages.rating.invalidFormat})

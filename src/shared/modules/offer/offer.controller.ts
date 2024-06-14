@@ -13,6 +13,7 @@ import {inject, injectable} from 'inversify';
 import {Request, Response} from 'express';
 import {Logger} from '../../libs/logger/index.js';
 import {OfferService} from './offer-service.interface.js';
+import {UserService} from '../user/index.js';
 import {fillDTO} from '../../helpers/index.js';
 import {OfferRdo} from './offer.rdo.js';
 import {UpdateOfferRequest} from './update-offer-request.type.js';
@@ -31,6 +32,7 @@ export class OfferController extends BaseController {
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.OfferService) private readonly offerService: OfferService,
     @inject(Component.ReviewService) private readonly reviewService: ReviewService,
+    @inject(Component.UserService) private readonly userService: UserService,
     @inject(Component.Config) private readonly configService: Config<RestSchema>,
   ) {
     super(logger);
@@ -142,9 +144,21 @@ export class OfferController extends BaseController {
     this.ok(res, fillDTO(OfferRdo, updatedOffer));
   }
 
-  public async delete({params}: Request, res: Response): Promise<void> {
-    const existsOffer = await this.offerService.deleteById(params.offerId);
-    this.ok(res, existsOffer);
+  public async delete({ params, tokenPayload }: Request, res: Response): Promise<void> {
+    const offer = await this.offerService.findById(params.offerId);
+    const author = await this.userService.findById(String(offer?.hostId));
+    if (author?.email === tokenPayload.email) {
+      const existsOffer = await this.offerService.deleteById(params.offerId);
+      const numberOfDeletedReviews = await this.reviewService.deleteByOfferId(params.offerId);
+      this.ok(res, {
+        remoteOffer: existsOffer,
+        numberOfDeletedReviews: numberOfDeletedReviews,
+      });
+    } else {
+      this.noContent(res, {
+        remoteOffer: false,
+      });
+    }
   }
 
   public async indexId({params, tokenPayload}: Request<ParamOfferId>, res: Response): Promise<void> {
