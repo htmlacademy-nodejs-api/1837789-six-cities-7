@@ -8,6 +8,8 @@ import {
   UploadFileMiddleware,
   RequestBody
 } from '../../libs/rest/index.js';
+import { StatusCodes } from 'http-status-codes';
+import { HttpError } from '../../libs/rest/errors/http-error.js';
 import {Component} from '../../types/index.js';
 import {inject, injectable} from 'inversify';
 import {Request, Response} from 'express';
@@ -155,9 +157,10 @@ export class OfferController extends BaseController {
         numberOfDeletedReviews: numberOfDeletedReviews,
       });
     } else {
-      this.noContent(res, {
-        remoteOffer: false,
-      });
+      throw new HttpError(
+        StatusCodes.BAD_REQUEST,
+        `${tokenPayload.email} didn't create this offer`,
+      );
     }
   }
 
