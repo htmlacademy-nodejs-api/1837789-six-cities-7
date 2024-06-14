@@ -307,7 +307,7 @@ paths:
         401:
           description: Срок действия токена истек.
 
-  /offers/{offer_id}/favorite/:
+  /offers/favorites/{offer_id}:
     put:
       tags:
         - offers
@@ -346,10 +346,10 @@ paths:
           description: Срок действия токена истекы
 
 # COMMENTS
-  /comments/{offer_id}/:
+  /offers/{offer_id}/reviews/:
     get:
       tags:
-        - comments
+        - reviews
       summary: Список комментариев для предложения.
       description: Список комментариев для предложения для определённого предложения.
         Сервис всегда возвращает список из 50 (или меньше) последних комментариев.
@@ -366,7 +366,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/comment'
 
-  /comments/:
+  /reviews/{offer_id}/:
     post:
       tags:
         - comments
