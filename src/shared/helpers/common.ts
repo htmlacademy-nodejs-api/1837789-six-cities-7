@@ -12,6 +12,12 @@ export function getRandomItems<T>(items: T[]):T[] {
   return items.slice(startPosition, endPosition);
 }
 
+export function getRandomImages<T>(items: T[]):T[] {
+  const startPosition = generateRandomValue(0, 5);
+  const endPosition = startPosition + 6;
+  return items.slice(startPosition, endPosition);
+}
+
 export function getRandomItem<T>(items: T[]):T {
   return items[generateRandomValue(0, items.length - 1)];
 }

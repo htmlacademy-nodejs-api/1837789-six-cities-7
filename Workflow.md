@@ -2,6 +2,20 @@
 
 ## Окружение
 
+#### Переменные окружения
+
+PORT=value - Порт для входящих подключений
+SALT=value - Соль для хэша пароля
+DB_HOST=value - IP-адрес сервера базы данных (MongoDB)
+DB_USER=value - Имя пользователя в базе данных (MongoDB)
+DB_PASSWORD=value - Пароль пользователя в базе данных (MongoDB)
+DB_PORT=value - Порт пользователя в базе данных (MongoDB)
+DB_NAME=value - Название базы данных (MongoDB)
+UPLOAD_DIRECTORY=value - Каталог для загрузки файлов
+JWT_SECRET=value - Секрет для знака JWT
+HOST=value - хост(losalhost)
+STATIC_DIRECTORY_PATH=value каталог для загрузки дефолтных файлов
+
 Для удобства работы над проектом используются инструменты из **Node.js** и **npm**. Все необходимые настройки произведены. Убедитесь, что на рабочем компьютере установлен актуальный LTS релиз Node.js**. Актуальная версия **Node.js** указана в файле `package.json` в поле `node`. Затем, в терминале, перейдите в директорию с проектом и _единожды_ запустите команду:
 
 ```bash
@@ -75,6 +89,14 @@ npm run ts ./src/main.cli.ts --generate 100 ./mocks/test-data.tsv http://localho
 #### Запуск мок-сервера:
 
 npm run mock:server
+
+#### Запуск скрипта для получения версии приложения:
+
+npm run ts -- ./src/main.cli.ts --version
+
+#### Импорт данных из TSV файла:
+
+npm run ts -- ./src/main.cli.ts --import mocks/mock-data.tsv
 
 В процессе запуска проекта будет выполнен процесс «Сборки проекта» и запуска результирующего кода.
 

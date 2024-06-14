@@ -20,7 +20,7 @@ export class ReviewEntity extends defaultClasses.TimeStamps {
   @prop({required: true, trim: true})
   public comment: string;
 
-  @prop({required: true})
+  @prop({required: false})
   public publishDate: Date;
 
   @prop({required: true})

@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { GeneratorConfig } from './generator-config.js';
 import { OfferGenerator } from './offer-generator.interface.js';
 import { MockServerData } from '../../types/index.js';
-import { generateRandomValue, getRandomItem, getRandomItems } from '../../helpers/index.js';
+import { generateRandomValue, getRandomItem, getRandomItems, getRandomImages } from '../../helpers/index.js';
 
 export class TSVOfferGenerator implements OfferGenerator {
   constructor(private readonly mockData: MockServerData) {}
@@ -16,7 +16,7 @@ export class TSVOfferGenerator implements OfferGenerator {
       .toISOString();
     const city = getRandomItem(this.mockData.cities);
     const previewImage = getRandomItem(this.mockData.previewImages);
-    const images = getRandomItems(this.mockData.images).join(';');
+    const images = getRandomImages(this.mockData.images).join(';');
     const isPremium = getRandomItem(this.mockData.isPremium);
     const isFavorite = getRandomItem(this.mockData.isFavorite);
     const rating = generateRandomValue(GeneratorConfig.minRating, GeneratorConfig.maxRating);
@@ -30,7 +30,7 @@ export class TSVOfferGenerator implements OfferGenerator {
     const hostAvatar = getRandomItem(this.mockData.hostAvatarUrls);
     const hostPassword = getRandomItem(this.mockData.hostPasswords);
     const hostType = getRandomItem(this.mockData.hostTypes);
-    const location = getRandomItem(this.mockData.locations);
+    const location = city.location;
 
     return [
       title, description, publicDate, city.name, city.location.latitude, city.location.longitude,

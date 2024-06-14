@@ -2,10 +2,7 @@ import {
   BaseController,
   HttpError,
   HttpMethod,
-  RequestQuery,
-  ValidateObjectIdMiddleware,
   ValidateDtoMiddleware,
-  DocumentExistsMiddleware,
   PrivateRouteMiddleware
 } from '../../libs/rest/index.js';
 import { inject, injectable } from 'inversify';
@@ -17,8 +14,6 @@ import { OfferService } from '../offer/index.js';
 import { StatusCodes } from 'http-status-codes';
 import { ReviewRdo } from './review.rdo.js';
 import { fillDTO } from '../../helpers/index.js';
-import { ParamOfferId } from '../offer/param-offerid.type.js';
-import { CreateReviewRequest } from './index.js';
 import { CreateReviewDto } from './dto/create-review.dto.js';
 
 
@@ -34,7 +29,7 @@ export class ReviewController extends BaseController {
     this.logger.info('Register routes for ReviewsController...');
 
     this.addRoute({
-      path: '/',
+      path: '/:offerId',
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
@@ -43,33 +38,35 @@ export class ReviewController extends BaseController {
       ]
     });
     this.addRoute({
-      path: '/offerId',
-      method: HttpMethod.Get,
-      handler: this.findByOfferId,
-      middlewares: [
-        new ValidateObjectIdMiddleware('offerId'),
-        new DocumentExistsMiddleware(this.offerService, 'Offer', 'id'),
-      ]
+      path: '/:offerId',
+      method: HttpMethod.Delete,
+      handler: this.delete,
     });
   }
 
-  public async findByOfferId({ params, query }: Request<ParamOfferId, unknown, unknown, RequestQuery>, res: Response) {
+  public async create({ params, body, tokenPayload }:Request, res: Response) {
     const { offerId } = params;
-    const { limit } = query;
-    const reviews = await this.reviewService.findByOfferId(offerId, Number(limit) || undefined);
-    this.ok(res, fillDTO(ReviewRdo, reviews));
-  }
-
-  public async create({ body, tokenPayload }: CreateReviewRequest, res: Response) {
-    if (! await this.offerService.exists(body.offerId)) {
+    if (! await this.offerService.exists(offerId)) {
       throw new HttpError(
         StatusCodes.NOT_FOUND,
-        `Offer with id ${body.offerId} not found.`,
+        `Offer with id ${offerId} not found.`,
         'ReviewsController'
       );
     }
 
-    const review = await this.reviewService.create({ ...body, hostId: tokenPayload.id });
+    const review = await this.reviewService.create({ offerId, ...body, hostId: tokenPayload.id});
     this.created(res, fillDTO(ReviewRdo, review));
+  }
+
+  public async delete(
+    { params }: Request,
+    res: Response,
+  ): Promise<void> {
+    const { offerId } = params;
+    const countReviews = await this.reviewService.deleteByOfferId(offerId);
+
+    this.ok(res, {
+      numberOfDeletedReviews: countReviews,
+    });
   }
 }

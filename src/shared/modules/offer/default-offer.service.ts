@@ -9,6 +9,8 @@ import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { Types } from 'mongoose';
 import { HttpError } from '../../libs/rest/index.js';
 import { StatusCodes } from 'http-status-codes';
+import { previewImages } from './offer.constant.js';
+import { getRandomItem } from '../../helpers/index.js';
 
 export const DEFAULT_OFFER_PREMIUM_COUNT = 3;
 export const DEFAULT_OFFER_COUNT = 60;
@@ -25,7 +27,7 @@ const addReviewsToOffer = [
   {
     $addFields: {
       reviewCount: {$size: '$reviews'},
-      rating: {$avg: '$reviews.rating'},
+      rating: { $trunc : [ {$avg: '$reviews.rating'}, 1 ] },
     }
   },
   {
@@ -60,7 +62,7 @@ export class DefaultOfferService implements OfferService {
   ) {}
 
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
-    const result = await this.offerModel.create(dto);
+    const result = await this.offerModel.create({ ...dto, previewImage: getRandomItem(previewImages) });
     this.logger.info(`New offer created: ${dto.title}`);
 
     return result;
@@ -68,6 +70,13 @@ export class DefaultOfferService implements OfferService {
 
   public async findById(offerId: string, currentHostId?: string): Promise<DocumentType<OfferEntity> | null> {
     const result = await this.offerModel.aggregate([
+      {
+        $addFields:
+        {
+          id: offerId,
+          publicDate: {$toString: '$createdAt'},
+        }
+      },
       {
         $match: { _id: new Types.ObjectId(offerId) }
       },
@@ -84,6 +93,12 @@ export class DefaultOfferService implements OfferService {
   public async find(currentHostId?: string, count?: number,): Promise<DocumentType<OfferEntity>[]> {
     const limit = count || DEFAULT_OFFER_COUNT;
     return this.offerModel.aggregate([
+      {$addFields:
+        {
+          id: {$toString: '$_id'},
+          publicDate: {$toString: '$createdAt'},
+        }
+      },
       {$set: {isFavorite: {$in: [new Types.ObjectId(currentHostId), '$favorites']}}},
       ...addReviewsToOffer,
       ...authorPipeline,
@@ -123,6 +138,7 @@ export class DefaultOfferService implements OfferService {
   public async findFavorites(hostId: string): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel.aggregate([
       {$match: {$expr: {$in: [new Types.ObjectId(hostId), '$favorites']}}},
+      {$addFields: {id: {$toString: '$_id'}}},
       {$set: {isFavorite: {$in: [new Types.ObjectId(hostId), '$favorites']}}},
       {$sort: {createdAt: SortType.Down}},
     ])

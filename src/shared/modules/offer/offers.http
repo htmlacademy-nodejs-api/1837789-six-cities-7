@@ -2,18 +2,18 @@
 ## Получить список предложений
 GET http://localhost:5000/offers/ HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFsaW5hQGV4YW1wbGUuY29tIiwibmFtZSI6ImFsaW5hIiwiaWQiOiI2NjZjMjZmODc5MWM1OWI2MWU4MzgxZTAiLCJpYXQiOjE3MTgzNjQwMDIsImV4cCI6MTcxODUzNjgwMn0.FUkAD2StnNoxmNaYuedgPiEBnInSu8YrZqxupwcFM8A
 
 ###
 
 ## Добавить новое предложение
 POST http://localhost:5000/offers/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJlbkBleGFtcGxlLmNvbSIsIm5hbWUiOiJiZW4iLCJpZCI6IjY2NjM0Yzc4ODBlYTVjZWViNzI3Njc0NCIsImlhdCI6MTcxNzc4MzY3NywiZXhwIjoxNzE3OTU2NDc3fQ.3J1aZjNNwsSTvH2wWGj5wA53cuA8NaxgTqSx_U9ECRQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFsaW5hQGV4YW1wbGUuY29tIiwibmFtZSI6ImFsaW5hIiwiaWQiOiI2NjZjMjZmODc5MWM1OWI2MWU4MzgxZTAiLCJpYXQiOjE3MTgzNjQwMDIsImV4cCI6MTcxODUzNjgwMn0.FUkAD2StnNoxmNaYuedgPiEBnInSu8YrZqxupwcFM8A
 
 {
   "title": "Wood and stone place123456",
-  "description": "The building is green and from 18th century, but where the bustle of the city comes.",
-  "publicDate": "2024-04-30T13:05:42.068Z",
+  "description": "0 The building is green and from 18th century, but where the bustle of the city comes.",
   "city": {
     "name": "Cologne",
     "location": {
@@ -21,7 +21,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJlbkBleGFtcGxlLmNvbSIsI
       "longitude": 6.959974
     }
   },
-  "previewImage": "previewImage2.jpg",
   "images": [
     "https://15.design.htmlacademy.pro/static/hotel/8.jpg",
     "https://15.design.htmlacademy.pro/static/hotel/2.jpg",
@@ -40,7 +39,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJlbkBleGFtcGxlLmNvbSIsI
     "Breakfast",
     "Laptop friendly workspace"
   ],
-  "hostId": "6656d4e79e76066c486b948b",
   "location": {
     "latitude": 48.85661,
     "longitude": 2.351499
@@ -51,40 +49,43 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJlbkBleGFtcGxlLmNvbSIsI
 
 ## Детальная информация по предложению.
 
-GET  http://localhost:5000/offers/66634c37d2c501a49d913995/ HTTP/1.1
+GET  http://localhost:5000/offers/666c3a84ea32d1de6d16af4c/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJlbkBleGFtcGxlLmNvbSIsIm5hbWUiOiJiZW4iLCJpZCI6IjY2NjM0Yzc4ODBlYTVjZWViNzI3Njc0NCIsImlhdCI6MTcxNzc4MzY3NywiZXhwIjoxNzE3OTU2NDc3fQ.3J1aZjNNwsSTvH2wWGj5wA53cuA8NaxgTqSx_U9ECRQ
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFsaW5hdmRvdmljaGVua28ucnVAZ21haWwuY29tIiwibmFtZSI6ImFsaW5hdmRvdmljaGVuayIsImlkIjoiNjY2YTg5Mzg2NWViYmQwOWUwMjYwZjM2IiwiaWF0IjoxNzE4MjU4MTA2LCJleHAiOjE3MTg0MzA5MDZ9.u0smTfFxo-jB6MabTaTKry-l69H0wkYkQ8bQZ9gSSaU
 ###
 
 ## Удалить предложение.
 
-DELETE  http://localhost:5000/offers/6656d4e79e76066c486b9492/ HTTP/1.1
+DELETE  http://localhost:5000/offers/666a7a6f88c4cae625709b16/ HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFsaW5hdmRvdmljaGVua28ucnVAZ21haWwuY29tIiwibmFtZSI6ImFsaW5hdmRvdmljaGVuayIsImlkIjoiNjY2YTg5Mzg2NWViYmQwOWUwMjYwZjM2IiwiaWF0IjoxNzE4MjU4MTA2LCJleHAiOjE3MTg0MzA5MDZ9.u0smTfFxo-jB6MabTaTKry-l69H0wkYkQ8bQZ9gSSaU
 
 ###
 
 ## Редактирование предложения
 
-PUT  http://localhost:5000/offers/66587fe58b1bc411de595c05/ HTTP/1.1
+PUT  http://localhost:5000/offers/666c1c1743aaf03ea981667a/ HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJlbkBleGFtcGxlLmNvbSIsIm5hbWUiOiJCZW4iLCJpZCI6IjY2NTk3ZWY3ZTEyYzIzMmI3Yjc5ZjJlZCIsImlhdCI6MTcxNzY3NjAwMiwiZXhwIjoxNzE3ODQ4ODAyfQ.eSoRvVMa_g_ZHEMy5iPg3iETumoaeuQrgFB8oZrnNgQ
 
 {
   "title": "Luxurious apartment at great location",
-  "hostId": "664edefd9a6d587d62439437"
 }
 
 ###
 
-## Изменить состояние флага isFavorite
-PUT http://localhost:5000/offers/66634c37d2c501a49d913995/favorites/ HTTP/1.1
+## Изменить состояние флага isFavorite на true
+POST http://localhost:5000/offers/favorites/666c3a84ea32d1de6d16af4c/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJlbkBleGFtcGxlLmNvbSIsIm5hbWUiOiJiZW4iLCJpZCI6IjY2NjM0Yzc4ODBlYTVjZWViNzI3Njc0NCIsImlhdCI6MTcxNzc4MzY3NywiZXhwIjoxNzE3OTU2NDc3fQ.3J1aZjNNwsSTvH2wWGj5wA53cuA8NaxgTqSx_U9ECRQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFsaW5hdmRvdmljaGVua28ucnVAZ21haWwuY29tIiwibmFtZSI6ImFsaW5hdmRvdmljaGVuayIsImlkIjoiNjY2YTg5Mzg2NWViYmQwOWUwMjYwZjM2IiwiaWF0IjoxNzE4MjU4MTA2LCJleHAiOjE3MTg0MzA5MDZ9.u0smTfFxo-jB6MabTaTKry-l69H0wkYkQ8bQZ9gSSaU
 
-{
-  "isFavorite": "true"
-}
+
+###
+
+## Изменить состояние флага isFavorite на false
+DELETE http://localhost:5000/offers/favorites/666a7a6f88c4cae625709af5/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFsaW5hQGV4YW1wbGUuY29tIiwibmFtZSI6ImFsaW5hIiwiaWQiOiI2NjZjMjZmODc5MWM1OWI2MWU4MzgxZTAiLCJpYXQiOjE3MTgzNjQwMDIsImV4cCI6MTcxODUzNjgwMn0.FUkAD2StnNoxmNaYuedgPiEBnInSu8YrZqxupwcFM8A
 
 ###
 
@@ -97,14 +98,20 @@ Content-Type: application/json
 ## Получить список избранных предложений для пользователя
 GET http://localhost:5000/offers/favorites HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJlbkBleGFtcGxlLmNvbSIsIm5hbWUiOiJiZW4iLCJpZCI6IjY2NjM0Yzc4ODBlYTVjZWViNzI3Njc0NCIsImlhdCI6MTcxNzc4MzY3NywiZXhwIjoxNzE3OTU2NDc3fQ.3J1aZjNNwsSTvH2wWGj5wA53cuA8NaxgTqSx_U9ECRQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFsaW5hQGV4YW1wbGUuY29tIiwibmFtZSI6ImFsaW5hIiwiaWQiOiI2NjZjMjZmODc5MWM1OWI2MWU4MzgxZTAiLCJpYXQiOjE3MTgzNjQwMDIsImV4cCI6MTcxODUzNjgwMn0.FUkAD2StnNoxmNaYuedgPiEBnInSu8YrZqxupwcFM8A
+
+###
+
+## Получить список отзывов для оффера
+GET http://localhost:5000/offers/666a7a6f88c4cae625709af5/reviews HTTP/1.1
+Content-Type: application/json
 
 ###
 
 
 ## Загрузить изображение для объявления
-POST http://localhost:5000/offers/65258514a30fc6ef77c0edf7/image HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJmaXJzdG5hbWUiOiJKYWNrIiwibGFzdG5hbWUiOiJUb3JyYW5jZSIsImlkIjoiNjUyNTk2ZjdlMGE2OTEyZDI5MzA1ZGQ2IiwiaWF0IjoxNjk4Njc3ODAyLCJleHAiOjE2OTg4NTA2MDJ9.HDAdzzjP9Cnfrl9c_TdIzXdjAls2dboO_FU-bScOwmU
+POST http://localhost:5000/offers/666968a7cc822432a1dbb88b/image HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImRpa0BleGFtcGxlLmNvbSIsIm5hbWUiOiJkaWsiLCJpZCI6IjY2Njk2OWVjOTg4ODg1NDQ2NzQwN2MyZCIsImlhdCI6MTcxODE4NDQ2NSwiZXhwIjoxNzE4MzU3MjY1fQ.dUmy0U0eDQArJzzTSZnWM-H80wOeId1eRrG4Z3-0yuE
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW

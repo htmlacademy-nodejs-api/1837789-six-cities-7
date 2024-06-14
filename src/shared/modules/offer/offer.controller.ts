@@ -8,14 +8,16 @@ import {
   UploadFileMiddleware,
   RequestBody
 } from '../../libs/rest/index.js';
+import { StatusCodes } from 'http-status-codes';
+import { HttpError } from '../../libs/rest/errors/http-error.js';
 import {Component} from '../../types/index.js';
 import {inject, injectable} from 'inversify';
 import {Request, Response} from 'express';
 import {Logger} from '../../libs/logger/index.js';
 import {OfferService} from './offer-service.interface.js';
+import {UserService} from '../user/index.js';
 import {fillDTO} from '../../helpers/index.js';
 import {OfferRdo} from './offer.rdo.js';
-import {UpdateOfferRequest} from './update-offer-request.type.js';
 import {CreateOfferRequest} from './create-offer-requset.type.js';
 import { ParamOfferId } from './param-offerid.type.js';
 import { ReviewRdo, ReviewService } from '../review/index.js';
@@ -31,6 +33,7 @@ export class OfferController extends BaseController {
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.OfferService) private readonly offerService: OfferService,
     @inject(Component.ReviewService) private readonly reviewService: ReviewService,
+    @inject(Component.UserService) private readonly userService: UserService,
     @inject(Component.Config) private readonly configService: Config<RestSchema>,
   ) {
     super(logger);
@@ -52,6 +55,14 @@ export class OfferController extends BaseController {
       middlewares: [
         new PrivateRouteMiddleware(),
         new ValidateDtoMiddleware(CreateOfferDto),
+      ]
+    });
+    this.addRoute({
+      path: '/favorites',
+      method: HttpMethod.Get,
+      handler: this.showFavoritesOffers,
+      middlewares: [
+        new PrivateRouteMiddleware()
       ]
     });
     this.addRoute({
@@ -86,17 +97,18 @@ export class OfferController extends BaseController {
       middlewares
     });
     this.addRoute({
-      path: '/favorites',
-      method: HttpMethod.Get,
-      handler: this.showFavoritesOffers,
+      path: '/favorites/:offerId',
+      method: HttpMethod.Post,
+      handler: this.postFavorite,
       middlewares: [
-        new PrivateRouteMiddleware()
-      ]
+        new PrivateRouteMiddleware(),
+        ...middlewares,
+      ],
     });
     this.addRoute({
-      path: '/:offerId/favorites',
-      method: HttpMethod.Put,
-      handler: this.updateFavorite,
+      path: '/favorites/:offerId',
+      method: HttpMethod.Delete,
+      handler: this.deleteFavorite,
       middlewares: [
         new PrivateRouteMiddleware(),
         ...middlewares,
@@ -109,7 +121,7 @@ export class OfferController extends BaseController {
       middlewares: [
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
-        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'image'),
+        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'previewImage'),
       ]
     });
   }
@@ -128,14 +140,36 @@ export class OfferController extends BaseController {
     this.created(res, fillDTO(OfferRdo, result));
   }
 
-  public async update({body, params}: UpdateOfferRequest, res: Response): Promise<void> {
-    const updatedOffer = await this.offerService.updateById(String(params.offerId), body);
-    this.ok(res, fillDTO(OfferRdo, updatedOffer));
+  public async update({body, params, tokenPayload }: Request, res: Response): Promise<void> {
+    const offer = await this.offerService.findById(params.offerId);
+    const author = await this.userService.findById(String(offer?.hostId));
+    if (author?.email === tokenPayload.email) {
+      const updatedOffer = await this.offerService.updateById(String(params.offerId), body);
+      this.ok(res, fillDTO(OfferRdo, updatedOffer));
+    } else {
+      throw new HttpError(
+        StatusCodes.BAD_REQUEST,
+        `${tokenPayload.email} didn't create this offer`,
+      );
+    }
   }
 
-  public async delete({params}: Request, res: Response): Promise<void> {
-    const existsOffer = await this.offerService.deleteById(params.offerId);
-    this.ok(res, existsOffer);
+  public async delete({ params, tokenPayload }: Request, res: Response): Promise<void> {
+    const offer = await this.offerService.findById(params.offerId);
+    const author = await this.userService.findById(String(offer?.hostId));
+    if (author?.email === tokenPayload.email) {
+      const existsOffer = await this.offerService.deleteById(params.offerId);
+      const numberOfDeletedReviews = await this.reviewService.deleteByOfferId(params.offerId);
+      this.ok(res, {
+        remoteOffer: existsOffer,
+        numberOfDeletedReviews: numberOfDeletedReviews,
+      });
+    } else {
+      throw new HttpError(
+        StatusCodes.BAD_REQUEST,
+        `${tokenPayload.email} didn't create this offer`,
+      );
+    }
   }
 
   public async indexId({params, tokenPayload}: Request<ParamOfferId>, res: Response): Promise<void> {
@@ -158,12 +192,27 @@ export class OfferController extends BaseController {
     this.ok(res, fillDTO(OfferRdo, offers));
   }
 
-  public async updateFavorite(
-    { params, tokenPayload, body }: Request<ParamOfferId, RequestBody, { isFavorite: string }>,
+  public async deleteFavorite(
+    { params, tokenPayload}: Request<ParamOfferId, RequestBody, { isFavorite: string }>,
     res: Response,
   ): Promise<void> {
     const { offerId } = params;
-    const isFavorite = body.isFavorite === 'true';
+    const isFavorite = false;
+    const hostId = tokenPayload.id;
+
+    const offer = await this.offerService.toggleFavorite(hostId, offerId, isFavorite);
+
+    this.ok(res, {
+      favorites: offer,
+    });
+  }
+
+  public async postFavorite(
+    { params, tokenPayload}: Request<ParamOfferId, RequestBody, { isFavorite: string }>,
+    res: Response,
+  ): Promise<void> {
+    const { offerId } = params;
+    const isFavorite = true;
     const hostId = tokenPayload.id;
 
     const offer = await this.offerService.toggleFavorite(hostId, offerId, isFavorite);

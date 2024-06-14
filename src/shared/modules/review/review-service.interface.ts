@@ -4,6 +4,6 @@ import { CreateReviewDto } from './index.js';
 
 export interface ReviewService {
   create(dto: CreateReviewDto): Promise<DocumentType<ReviewEntity>>;
-  findByOfferId(offerId: string, count?: number): Promise<DocumentType<ReviewEntity>[]>;
+  findByOfferId(offerId: string): Promise<DocumentType<ReviewEntity>[]>;
   deleteByOfferId(offerId: string): Promise<number | null>;
 }

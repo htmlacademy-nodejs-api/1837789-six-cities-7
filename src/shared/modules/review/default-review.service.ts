@@ -5,6 +5,7 @@ import { Logger } from '../../libs/logger/index.js';
 import { DocumentType, types } from '@typegoose/typegoose';
 import { inject, injectable } from 'inversify';
 import { CreateReviewDto } from './index.js';
+import { Types } from 'mongoose';
 
 const DEFAULT_REVIEW_COUNT = 50;
 
@@ -23,13 +24,33 @@ export class DefaultReviewService implements ReviewService {
     return result;
   }
 
-  public async findByOfferId(offerId: string, count?: number): Promise<DocumentType<ReviewEntity>[]> {
-    const limit = count ?? DEFAULT_REVIEW_COUNT;
-    return this.reviewModel
-      .find({offerId})
-      .sort({createdAt: SortType.Down})
-      .limit(limit)
-      .populate('hostId');
+  public async findByOfferId(offerId: string): Promise<DocumentType<ReviewEntity>[]> {
+    return this.reviewModel.aggregate([
+      {
+        $match: { offerId: new Types.ObjectId(offerId) }
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'hostId',
+          foreignField: '_id',
+          as: 'users',
+        },
+      },
+      {
+        $addFields: {
+          id: {$toString: '$_id'},
+          date: {$toString: '$createdAt'},
+          author: { $arrayElemAt: ['$users', 0] },
+        }
+      },
+      {
+        $unset: ['users'],
+      },
+      { $sort: { createdAt: SortType.Down } },
+      { $limit: DEFAULT_REVIEW_COUNT },
+    ])
+      .exec();
   }
 
   public async deleteByOfferId(offerId: string): Promise<number | null> {

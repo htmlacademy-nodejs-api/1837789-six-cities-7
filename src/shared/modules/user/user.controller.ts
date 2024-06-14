@@ -36,6 +36,11 @@ export class UserController extends BaseController {
     this.logger.info('Register routes for UserController…');
 
     this.addRoute({
+      path: '/login',
+      method: HttpMethod.Get,
+      handler: this.checkAuthenticate,
+    });
+    this.addRoute({
       path: '/:hostId',
       method: HttpMethod.Get,
       handler: this.indexId,
@@ -60,11 +65,6 @@ export class UserController extends BaseController {
         new ValidateObjectIdMiddleware('hostId'),
         new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar'),
       ]
-    });
-    this.addRoute({
-      path: '/login',
-      method: HttpMethod.Get,
-      handler: this.checkAuthenticate,
     });
   }
 
