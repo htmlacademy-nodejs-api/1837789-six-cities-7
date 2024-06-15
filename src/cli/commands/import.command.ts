@@ -64,9 +64,8 @@ export class ImportCommand implements Command {
   public async execute(filename: string, login: string, password: string, host: string, dbname: string, salt: string): Promise<void> {
     const uri = getMongoURI(login, password, host, DEFAULT_DB_PORT, dbname);
     this.salt = salt;
-    this.logger.info(uri);
 
-    await this.databaseClient.connect('mongodb://127.0.0.1:27017/sixCities?authSource=admin');
+    await this.databaseClient.connect(uri);
 
     const fileReader = new TSVFileReader(filename.trim());
 
