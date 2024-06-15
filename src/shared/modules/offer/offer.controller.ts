@@ -143,33 +143,31 @@ export class OfferController extends BaseController {
   public async update({body, params, tokenPayload }: Request, res: Response): Promise<void> {
     const offer = await this.offerService.findById(params.offerId);
     const author = await this.userService.findById(String(offer?.hostId));
-    if (author?.email === tokenPayload.email) {
-      const updatedOffer = await this.offerService.updateById(String(params.offerId), body);
-      this.ok(res, fillDTO(OfferRdo, updatedOffer));
-    } else {
+    if (author?.email !== tokenPayload.email) {
       throw new HttpError(
         StatusCodes.BAD_REQUEST,
         `${tokenPayload.email} didn't create this offer`,
       );
     }
+    const updatedOffer = await this.offerService.updateById(String(params.offerId), body);
+    this.ok(res, fillDTO(OfferRdo, updatedOffer));
   }
 
   public async delete({ params, tokenPayload }: Request, res: Response): Promise<void> {
     const offer = await this.offerService.findById(params.offerId);
     const author = await this.userService.findById(String(offer?.hostId));
-    if (author?.email === tokenPayload.email) {
-      const existsOffer = await this.offerService.deleteById(params.offerId);
-      const numberOfDeletedReviews = await this.reviewService.deleteByOfferId(params.offerId);
-      this.ok(res, {
-        remoteOffer: existsOffer,
-        numberOfDeletedReviews: numberOfDeletedReviews,
-      });
-    } else {
+    if (author?.email !== tokenPayload.email) {
       throw new HttpError(
         StatusCodes.BAD_REQUEST,
         `${tokenPayload.email} didn't create this offer`,
       );
     }
+    const existsOffer = await this.offerService.deleteById(params.offerId);
+    const numberOfDeletedReviews = await this.reviewService.deleteByOfferId(params.offerId);
+    this.ok(res, {
+      remoteOffer: existsOffer,
+      numberOfDeletedReviews: numberOfDeletedReviews,
+    });
   }
 
   public async indexId({params, tokenPayload}: Request<ParamOfferId>, res: Response): Promise<void> {
